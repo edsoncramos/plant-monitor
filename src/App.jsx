@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function App() {
 
@@ -301,9 +301,32 @@ function App() {
     },
   ];
 
-  const [maquinas, setMaquinas] = useState(maquinasIniciais);
+  const [maquinas, setMaquinas] = useState(() => {
+    const dadosSalvos = localStorage.getItem("maquinas");
+    return dadosSalvos
+      ? JSON.parse(dadosSalvos)
+      : maquinasIniciais;
+  });
+
+  const [historico, setHistorico] = useState(() => {
+    const historicoSalvo = localStorage.getItem("historico");
+    return historicoSalvo
+      ? JSON.parse(historicoSalvo)
+      : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("maquinas", JSON.stringify(maquinas));
+  }, [maquinas]);
+
+  useEffect(() => {
+    localStorage.setItem("historico", JSON.stringify(historico));
+  }, [historico]);
 
   const alterarStatus = (id, novoStatus, novaCor) => {
+
+    const maquinaAtual = maquinas.find((maq) => maq.id === id);
+
     const novasMaquinas = maquinas.map((maq) =>
       maq.id === id
         ? { ...maq, status: novoStatus, cor: novaCor }
@@ -311,61 +334,182 @@ function App() {
     );
 
     setMaquinas(novasMaquinas);
+
+    const novoEvento = {
+      maquina: maquinaAtual.nome,
+      setor: maquinaAtual.setor,
+      statusAnterior: maquinaAtual.status,
+      novoStatus: novoStatus,
+      operador: "Edson",
+      dataHora: new Date().toLocaleString("pt-BR"),
+    };
+
+    setHistorico((prev) => [
+      novoEvento,
+      ...prev,
+    ]);
   };
 
   return (
     <div className="container">
+
       <h1>Plant Monitor</h1>
 
+      <p className="subtitulo">
+        Controle manual de funcionamento dos equipamentos
+      </p>
+
       <div className="grid">
+
         {maquinas.map((maq) => (
+
           <div className="card" key={maq.id}>
+
             <h2>{maq.nome}</h2>
 
             <p>
               <strong>Setor:</strong> {maq.setor}
             </p>
 
-            <p style={{ color: maq.cor }}>
+            <p
+              className="status"
+              style={{ color: maq.cor }}
+            >
               ● {maq.status}
             </p>
 
             <div className="botoes">
+
               <button
+                className="funcionando"
                 onClick={() =>
-                  alterarStatus(maq.id, "Funcionando", "green")
+                  alterarStatus(
+                    maq.id,
+                    "Funcionando",
+                    "green"
+                  )
                 }
               >
                 Funcionando
               </button>
 
               <button
+                className="parado"
                 onClick={() =>
-                  alterarStatus(maq.id, "Parado", "red")
+                  alterarStatus(
+                    maq.id,
+                    "Parado",
+                    "red"
+                  )
                 }
               >
                 Parado
               </button>
 
               <button
+                className="setup"
                 onClick={() =>
-                  alterarStatus(maq.id, "Setup", "orange")
+                  alterarStatus(
+                    maq.id,
+                    "Setup",
+                    "orange"
+                  )
                 }
               >
                 Setup
               </button>
 
               <button
+                className="manutencao"
                 onClick={() =>
-                  alterarStatus(maq.id, "Manutenção", "gray")
+                  alterarStatus(
+                    maq.id,
+                    "Manutenção",
+                    "gray"
+                  )
                 }
               >
                 Manutenção
               </button>
+
             </div>
+
           </div>
+
         ))}
+
       </div>
+
+      <div
+        style={{
+          marginTop: "40px",
+          background: "white",
+          padding: "20px",
+          borderRadius: "12px",
+          boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+        }}
+      >
+
+        <h2
+          style={{
+            textAlign: "center",
+            marginBottom: "20px",
+          }}
+        >
+          Histórico de Eventos
+        </h2>
+
+        <div style={{ overflowX: "auto" }}>
+
+          <table
+            style={{
+              width: "100%",
+              borderCollapse: "collapse",
+            }}
+          >
+
+            <thead>
+
+              <tr
+                style={{
+                  background: "#f1f1f1",
+                }}
+              >
+                <th>Máquina</th>
+                <th>Setor</th>
+                <th>Status Anterior</th>
+                <th>Novo Status</th>
+                <th>Data/Hora</th>
+                <th>Operador</th>
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              {historico.map((evento, index) => (
+
+                <tr key={index}>
+
+                  <td>{evento.maquina}</td>
+                  <td>{evento.setor}</td>
+                  <td>{evento.statusAnterior}</td>
+                  <td>{evento.novoStatus}</td>
+                  <td>{evento.dataHora}</td>
+                  <td>{evento.operador}</td>
+
+                </tr>
+
+              ))}
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
     </div>
   );
 }
