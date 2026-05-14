@@ -296,6 +296,5 @@ const maquinasIniciais = [
   },
 ];
 
-}
 
 export default App;
