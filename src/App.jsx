@@ -21,7 +21,6 @@ function App() {
   const [usuario, setUsuario] = useState(null);
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-
   const [historico, setHistorico] = useState([]);
 
   const maquinas = [
@@ -39,6 +38,71 @@ function App() {
       id: 3,
       nome: "11100.103 - Corte Blank Calha - PR",
       setor: "CORTE",
+    },
+    {
+      id: 4,
+      nome: "11200.200 - Máquina Laser",
+      setor: "CORTE",
+    },
+    {
+      id: 5,
+      nome: "11200.201 - Laser LXSHOW - 6000W",
+      setor: "CORTE",
+    },
+    {
+      id: 6,
+      nome: "11300.319 - Hidráulica Yucel 800T",
+      setor: "ESTAMPAGEM",
+    },
+    {
+      id: 7,
+      nome: "11300.320 - Hidráulica Yucel 600T",
+      setor: "ESTAMPAGEM",
+    },
+    {
+      id: 8,
+      nome: "11300.321 - Hidráulica Yucel 200T",
+      setor: "ESTAMPAGEM",
+    },
+    {
+      id: 9,
+      nome: "11400.401 - Dobradeira Newton PDM-2025-1",
+      setor: "DOBRA",
+    },
+    {
+      id: 10,
+      nome: "11500.501 - Solda Apes-1",
+      setor: "SOLDA",
+    },
+    {
+      id: 11,
+      nome: "11600.601 - Acabamento Apes DRX-1",
+      setor: "LIXA/ACABAMENTO",
+    },
+    {
+      id: 12,
+      nome: "11700.701 - Aglomerado",
+      setor: "REVESTIMENTO",
+    },
+    {
+      id: 13,
+      nome: "11800.801 - Embaladeira Projepack",
+      setor: "EMBALAGEM",
+    },
+    {
+      id: 14,
+      nome: "11900.903 - Robô 01",
+      setor: "POLIMENTO",
+    },
+    {
+      id: 15,
+      nome: "11900.904 - Robô 02",
+      setor: "POLIMENTO",
+    },
+    {
+      id: 16,
+      nome: "11900.905 - Robô 03",
+      setor: "POLIMENTO",
     },
   ];
 
@@ -60,7 +124,7 @@ function App() {
   useEffect(() => {
     const q = query(
       collection(db, "historico"),
-      orderBy("dataHora", "desc")
+      orderBy("timestamp", "desc")
     );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -90,6 +154,7 @@ function App() {
       novoStatus,
       operador: usuario.email,
       dataHora: new Date().toLocaleString("pt-BR"),
+      timestamp: Date.now(),
     });
   }
 
@@ -108,16 +173,7 @@ function App() {
 
   if (!usuario) {
     return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          flexDirection: "column",
-          gap: "10px",
-        }}
-      >
+      <div className="login-container">
         <h1>Plant Monitor</h1>
 
         <input
@@ -125,10 +181,6 @@ function App() {
           placeholder="E-mail"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          style={{
-            padding: "10px",
-            width: "250px",
-          }}
         />
 
         <input
@@ -136,43 +188,23 @@ function App() {
           placeholder="Senha"
           value={senha}
           onChange={(e) => setSenha(e.target.value)}
-          style={{
-            padding: "10px",
-            width: "250px",
-          }}
         />
 
-        <button
-          onClick={fazerLogin}
-          style={{
-            padding: "10px 20px",
-            cursor: "pointer",
-          }}
-        >
-          Entrar
-        </button>
+        <button onClick={fazerLogin}>Entrar</button>
       </div>
     );
   }
 
   return (
     <div className="container">
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "20px",
-        }}
-      >
+      <div className="topo">
         <div>
           <h1>Plant Monitor</h1>
           <p>Controle manual de funcionamento dos equipamentos</p>
         </div>
 
-        <div>
-          <p>{usuario.email}</p>
-
+        <div className="usuario-box">
+          <span>{usuario.email}</span>
           <button onClick={sair}>Sair</button>
         </div>
       </div>
@@ -186,12 +218,7 @@ function App() {
               <strong>Setor:</strong> {maquina.setor}
             </p>
 
-            <p
-              style={{
-                color: "green",
-                fontWeight: "bold",
-              }}
-            >
+            <p className="status">
               ● {statusMaquinas[maquina.id]}
             </p>
 
@@ -232,12 +259,27 @@ function App() {
                 Manutenção
               </button>
             </div>
+
+            <div className="historico-maquina">
+              <h4>Últimos eventos</h4>
+
+              {historico
+                .filter((item) => item.maquina === maquina.nome)
+                .slice(0, 5)
+                .map((item) => (
+                  <div key={item.id} className="evento-item">
+                    <small>
+                      {item.novoStatus} - {item.dataHora}
+                    </small>
+                  </div>
+                ))}
+            </div>
           </div>
         ))}
       </div>
 
-      <div className="historico">
-        <h2>Histórico de Eventos</h2>
+      <div className="historico-geral">
+        <h2>Histórico Geral</h2>
 
         <table>
           <thead>
@@ -252,7 +294,7 @@ function App() {
           </thead>
 
           <tbody>
-            {historico.map((item) => (
+            {historico.slice(0, 20).map((item) => (
               <tr key={item.id}>
                 <td>{item.maquina}</td>
                 <td>{item.setor}</td>
