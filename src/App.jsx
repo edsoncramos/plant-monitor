@@ -1,6 +1,16 @@
 import "./App.css";
 import { useState, useEffect } from "react";
 
+import {
+  collection,
+  doc,
+  setDoc,
+  addDoc,
+  onSnapshot,
+} from "firebase/firestore";
+
+import { db } from "./firebase";
+
 function App() {
 
   const maquinasIniciais = [
@@ -301,53 +311,111 @@ function App() {
     },
   ];
 
-  const [maquinas, setMaquinas] = useState(() => {
-    const dadosSalvos = localStorage.getItem("maquinas");
-    return dadosSalvos
-      ? JSON.parse(dadosSalvos)
-      : maquinasIniciais;
-  });
+  const [maquinas, setMaquinas] = useState(maquinasIniciais);
 
-  const [historico, setHistorico] = useState(() => {
-    const historicoSalvo = localStorage.getItem("historico");
-    return historicoSalvo
-      ? JSON.parse(historicoSalvo)
-      : [];
-  });
+  const [historico, setHistorico] = useState([]);
 
   useEffect(() => {
-    localStorage.setItem("maquinas", JSON.stringify(maquinas));
-  }, [maquinas]);
 
-  useEffect(() => {
-    localStorage.setItem("historico", JSON.stringify(historico));
-  }, [historico]);
+    const unsubscribeMaquinas = onSnapshot(
+      collection(db, "maquinas"),
+      (snapshot) => {
 
-  const alterarStatus = (id, novoStatus, novaCor) => {
+        if (!snapshot.empty) {
 
-    const maquinaAtual = maquinas.find((maq) => maq.id === id);
+          const lista = snapshot.docs.map((doc) => ({
+            ...doc.data(),
+          }));
 
-    const novasMaquinas = maquinas.map((maq) =>
-      maq.id === id
-        ? { ...maq, status: novoStatus, cor: novaCor }
-        : maq
+          lista.sort((a, b) => a.id - b.id);
+
+          setMaquinas(lista);
+        }
+      }
     );
 
-    setMaquinas(novasMaquinas);
+    const unsubscribeHistorico = onSnapshot(
+      collection(db, "historico"),
+      (snapshot) => {
 
-    const novoEvento = {
+        const lista = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        lista.sort(
+          (a, b) =>
+            new Date(b.dataCompleta) -
+            new Date(a.dataCompleta)
+        );
+
+        setHistorico(lista);
+      }
+    );
+
+    return () => {
+      unsubscribeMaquinas();
+      unsubscribeHistorico();
+    };
+
+  }, []);
+
+  useEffect(() => {
+
+    const salvarMaquinas = async () => {
+
+      const snapshot = await onSnapshot(
+        collection(db, "maquinas"),
+        () => {}
+      );
+
+      snapshot();
+
+      maquinasIniciais.forEach(async (maq) => {
+
+        const ref = doc(db, "maquinas", String(maq.id));
+
+        await setDoc(ref, maq);
+
+      });
+
+    };
+
+    salvarMaquinas();
+
+  }, []);
+
+  const alterarStatus = async (
+    id,
+    novoStatus,
+    novaCor
+  ) => {
+
+    const maquinaAtual = maquinas.find(
+      (maq) => maq.id === id
+    );
+
+    const maquinaAtualizada = {
+      ...maquinaAtual,
+      status: novoStatus,
+      cor: novaCor,
+    };
+
+    await setDoc(
+      doc(db, "maquinas", String(id)),
+      maquinaAtualizada
+    );
+
+    await addDoc(collection(db, "historico"), {
       maquina: maquinaAtual.nome,
       setor: maquinaAtual.setor,
       statusAnterior: maquinaAtual.status,
       novoStatus: novoStatus,
       operador: "Edson",
       dataHora: new Date().toLocaleString("pt-BR"),
-    };
+      dataCompleta: new Date().toISOString(),
+    });
 
-    setHistorico((prev) => [
-      novoEvento,
-      ...prev,
-    ]);
   };
 
   return (
