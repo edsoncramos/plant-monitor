@@ -1,8 +1,8 @@
 import { initializeApp } from "firebase/app";
 
-import {
-  getFirestore,
-} from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
+
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA6SmWi50zgGGI1ca6WLP9LsSm2f6koT8M",
@@ -10,9 +10,11 @@ const firebaseConfig = {
   projectId: "plant-monitor-1483e",
   storageBucket: "plant-monitor-1483e.firebasestorage.app",
   messagingSenderId: "944151195593",
-  appId: "1:944151195593:web:52b1ab442f5904544dc218"
+  appId: "1:944151195593:web:52b1ab442f5904544dc218",
 };
 
 const app = initializeApp(firebaseConfig);
 
 export const db = getFirestore(app);
+
+export const auth = getAuth(app);
