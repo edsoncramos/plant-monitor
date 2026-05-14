@@ -327,6 +327,7 @@ function App() {
           : m.nome === filtroMaquina;
 
       return setorOk && maquinaOk;
+
     });
 
   async function alterarStatus(
@@ -574,7 +575,11 @@ function App() {
                     .replace("ã", "a")
                   }`}
                 >
-                  ● {getStatusAtual(maquina.nome)}
+
+                  <span className="status-indicator"></span>
+
+                  {getStatusAtual(maquina.nome)}
+
                 </p>
 
                 <div className="botoes">
