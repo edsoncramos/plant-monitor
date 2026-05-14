@@ -295,3 +295,7 @@ const maquinasIniciais = [
     cor: "green",
   },
 ];
+
+}
+
+export default App;
