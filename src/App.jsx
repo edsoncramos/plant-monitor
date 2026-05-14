@@ -34,7 +34,15 @@ function App() {
   const [filtroMaquina, setFiltroMaquina] =
     useState("TODAS");
 
+
+
+  // =====================================================
+  // MÁQUINAS
+  // =====================================================
+
   const maquinas = [
+
+    // CORTE
 
     {
       id: 1,
@@ -66,6 +74,10 @@ function App() {
       setor: "CORTE",
     },
 
+
+
+    // ESTAMPAGEM
+
     {
       id: 6,
       nome: "11300.319 - Hidráulica Yucel 800T",
@@ -86,257 +98,469 @@ function App() {
 
     {
       id: 9,
+      nome: "11300.301 - Hidráulica Schuller 500T",
+      setor: "ESTAMPAGEM",
+    },
+
+    {
+      id: 10,
+      nome: "11300.305 - Hidráulica Dan-Press 100 - 1",
+      setor: "ESTAMPAGEM",
+    },
+
+    {
+      id: 11,
+      nome: "11300.303 - Hidráulica 350T (Dinossauro)",
+      setor: "ESTAMPAGEM",
+    },
+
+    {
+      id: 12,
+      nome: "11300.302 - Hidráulica Altametal 230T",
+      setor: "ESTAMPAGEM",
+    },
+
+    {
+      id: 13,
+      nome: "11300.306 - Hidráulica Dan Press 100 - 2",
+      setor: "ESTAMPAGEM",
+    },
+
+    {
+      id: 14,
+      nome: "11300.307 - Hidráulica Rolop 660T",
+      setor: "ESTAMPAGEM",
+    },
+
+    {
+      id: 15,
+      nome: "11300.308 - Hidráulica Rolop 400T",
+      setor: "ESTAMPAGEM",
+    },
+
+    {
+      id: 16,
+      nome: "11300.315 - Hidráulica Muller 250T",
+      setor: "ESTAMPAGEM",
+    },
+
+    {
+      id: 17,
+      nome: "11300.309 - Hidráulica Muller 400T",
+      setor: "ESTAMPAGEM",
+    },
+
+    {
+      id: 18,
+      nome: "11300.304 - Excêntrica Schuler 180T",
+      setor: "ESTAMPAGEM",
+    },
+
+    {
+      id: 19,
+      nome: "11300.313 - Exêntrica Harlo 40T - Corte Calha",
+      setor: "ESTAMPAGEM",
+    },
+
+    {
+      id: 20,
+      nome: "11300.314 - Exêntrica Jiangsu 40T - Chp Lambari",
+      setor: "ESTAMPAGEM",
+    },
+
+
+
+    // CORTE CANTO/FURO MIOLO
+
+    {
+      id: 21,
+      nome: "12100.101 - Exêntrica Calvi 160T - (Dedicada N4)",
+      setor: "CORTE CANTO/FURO MIOLO",
+    },
+
+    {
+      id: 22,
+      nome: "12100.102 - Exêntrica Shuller 160T - (Gentil)",
+      setor: "CORTE CANTO/FURO MIOLO",
+    },
+
+    {
+      id: 23,
+      nome: "12100.103 - Exêntrica Jiangsu 80T (Redonda)",
+      setor: "CORTE CANTO/FURO MIOLO",
+    },
+
+    {
+      id: 24,
+      nome: "12100.104 - Hidráulica Corte Canto (Laiser)",
+      setor: "CORTE CANTO/FURO MIOLO",
+    },
+
+    {
+      id: 25,
+      nome: "12100.108 - Hidrod. Corte Canto+Logo - 2 (Ibra)",
+      setor: "CORTE CANTO/FURO MIOLO",
+    },
+
+
+
+    // DOBRA
+
+    {
+      id: 26,
       nome: "11400.401 - Dobradeira Newton PDM-2025-1",
       setor: "DOBRA",
     },
 
     {
-      id: 10,
-      nome: "11400.402 - Dobradeira Newton PDM-3020",
+      id: 27,
+      nome: "11400.402 - Dobradeira Newton PDM-2025-2",
       setor: "DOBRA",
     },
 
     {
-      id: 11,
-      nome: "11400.403 - Dobradeira Gasparini",
+      id: 28,
+      nome: "11400.403 - Dobradeira Newton PDM-2025-5",
       setor: "DOBRA",
     },
 
     {
-      id: 12,
+      id: 29,
+      nome: "11400.404 - Dobradeira Newton PDH-7030-4",
+      setor: "DOBRA",
+    },
+
+    {
+      id: 30,
+      nome: "11400.405 - Dobradeira Hid. Hidrodinamica-1",
+      setor: "DOBRA",
+    },
+
+    {
+      id: 31,
+      nome: "11400.406 - Dobradeira Hid. MCHD-1",
+      setor: "DOBRA",
+    },
+
+    {
+      id: 32,
+      nome: "11400.407 - Dobradeira Daltec",
+      setor: "DOBRA",
+    },
+
+    {
+      id: 33,
+      nome: "11400.408 - Ponteadeira Simples DRX-1",
+      setor: "DOBRA",
+    },
+
+    {
+      id: 34,
+      nome: "11400.409 - Ponteadeira Dupla-1",
+      setor: "DOBRA",
+    },
+
+    {
+      id: 35,
+      nome: "11400.410 - Ponteadeira Tripla-1",
+      setor: "DOBRA",
+    },
+
+    {
+      id: 36,
+      nome: "11400.411 - Ponteadeira Lambari DRX-1",
+      setor: "DOBRA",
+    },
+
+    {
+      id: 37,
+      nome: "11400.412 - Robô Solda Ponto",
+      setor: "DOBRA",
+    },
+
+
+
+    // SOLDA
+
+    {
+      id: 38,
       nome: "11500.501 - Solda Apes-1",
       setor: "SOLDA",
     },
 
     {
-      id: 13,
-      nome: "11500.502 - Solda Robotizada Fanuc",
+      id: 39,
+      nome: "11500.502 - Solda Apes DRX-2",
       setor: "SOLDA",
     },
 
-    {
-      id: 14,
-      nome: "11500.503 - Solda MIG Manual",
-      setor: "SOLDA",
-    },
+
+
+    // LIXA/ACABAMENTO
 
     {
-      id: 15,
-      nome: "11500.504 - Solda TIG",
-      setor: "SOLDA",
-    },
-
-    {
-      id: 16,
+      id: 40,
       nome: "11600.601 - Acabamento Apes DRX-1",
-      setor: "POLIMENTO",
+      setor: "LIXA/ACABAMENTO",
     },
 
     {
-      id: 17,
-      nome: "11600.602 - Politriz Manual",
-      setor: "POLIMENTO",
+      id: 41,
+      nome: "11600.602 - Acabamento Lucson-1",
+      setor: "LIXA/ACABAMENTO",
     },
 
     {
-      id: 18,
+      id: 42,
+      nome: "11600.606 - Acabamento Apes-2 (Franke)",
+      setor: "LIXA/ACABAMENTO",
+    },
+
+
+
+    // TANQUES
+
+    {
+      id: 43,
+      nome: "12200.201 - Excêntrica Walviwg 25T",
+      setor: "TANQUES",
+    },
+
+    {
+      id: 44,
+      nome: "12200.202 - Excêntrica Jundiaí 40T",
+      setor: "TANQUES",
+    },
+
+    {
+      id: 45,
+      nome: "12200.203 - Dobradeira IMAG TQ",
+      setor: "TANQUES",
+    },
+
+    {
+      id: 46,
+      nome: "12200.204 - Hidrodinâmica 40T",
+      setor: "TANQUES",
+    },
+
+    {
+      id: 47,
+      nome: "12200.205 - Ponteadeira Simples TQ-1",
+      setor: "TANQUES",
+    },
+
+    {
+      id: 48,
+      nome: "12200.206 - Ponteadeira Dupla TQ-1",
+      setor: "TANQUES",
+    },
+
+    {
+      id: 49,
+      nome: "12200.207 - Ponteadeira Dupla-3",
+      setor: "TANQUES",
+    },
+
+    {
+      id: 50,
+      nome: "12200.208 - Solda Costura-1",
+      setor: "TANQUES",
+    },
+
+    {
+      id: 51,
+      nome: "12200.209 - Solda Costura-2",
+      setor: "TANQUES",
+    },
+
+    {
+      id: 52,
+      nome: "12200.210 - Exêntrica Harlo 40T - Sabonet.",
+      setor: "TANQUES",
+    },
+
+
+
+    // REVESTIMENTO
+
+    {
+      id: 53,
       nome: "11700.701 - Aglomerado",
       setor: "REVESTIMENTO",
     },
 
     {
-      id: 19,
-      nome: "11700.702 - Revestidora UV",
+      id: 54,
+      nome: "11700.702 - Cola/Montagem",
       setor: "REVESTIMENTO",
     },
 
     {
-      id: 20,
-      nome: "11700.703 - Revestidora Automática",
+      id: 55,
+      nome: "11700.703 - Argamassa",
       setor: "REVESTIMENTO",
     },
 
     {
-      id: 21,
-      nome: "11800.801 - Embaladeira Projepack",
+      id: 56,
+      nome: "11700.704 - Seccionadora/Aglomerado",
+      setor: "REVESTIMENTO",
+    },
+
+
+
+    // EMBALAGEM
+
+    {
+      id: 57,
+      nome: "11800.801 - Embaladeira Projepack - Arg.",
       setor: "EMBALAGEM",
     },
 
     {
-      id: 22,
-      nome: "11800.802 - Paletizadora",
+      id: 58,
+      nome: "11800.802 - Embaladeira Pack - Aglo",
       setor: "EMBALAGEM",
     },
 
     {
-      id: 23,
-      nome: "11800.803 - Envolvedora Stretch",
+      id: 59,
+      nome: "11800.803 - Embalagem Cubas Avulsas",
       setor: "EMBALAGEM",
     },
 
     {
-      id: 24,
+      id: 60,
+      nome: "11800.804 - Embalagem Calha Fogão Pia",
+      setor: "EMBALAGEM",
+    },
+
+
+
+    // POLIMENTO
+
+    {
+      id: 61,
       nome: "11900.901 - Polimento Motores",
       setor: "POLIMENTO",
     },
 
     {
-      id: 25,
+      id: 62,
       nome: "11900.902 - Polimento Lucson",
       setor: "POLIMENTO",
     },
 
     {
-      id: 26,
+      id: 63,
       nome: "11900.903 - Robô 01",
       setor: "POLIMENTO",
     },
 
     {
-      id: 27,
+      id: 64,
       nome: "11900.904 - Robô 02",
       setor: "POLIMENTO",
     },
 
     {
-      id: 28,
+      id: 65,
       nome: "11900.905 - Robô 03",
       setor: "POLIMENTO",
     },
 
     {
-      id: 29,
+      id: 66,
       nome: "11900.906 - Robô 04",
       setor: "POLIMENTO",
     },
 
     {
-      id: 30,
+      id: 67,
       nome: "11900.907 - Robô 05",
       setor: "POLIMENTO",
     },
 
     {
-      id: 31,
+      id: 68,
       nome: "11900.908 - Robô 06",
       setor: "POLIMENTO",
     },
 
     {
-      id: 32,
+      id: 69,
       nome: "11900.909 - Robô 07",
       setor: "POLIMENTO",
     },
 
     {
-      id: 33,
+      id: 70,
       nome: "11900.910 - Robô 08",
       setor: "POLIMENTO",
     },
 
     {
-      id: 34,
+      id: 71,
       nome: "11900.911 - Robô 09",
       setor: "POLIMENTO",
     },
 
     {
-      id: 35,
+      id: 72,
       nome: "11900.912 - Robô 10",
       setor: "POLIMENTO",
     },
 
     {
-      id: 36,
+      id: 73,
       nome: "11900.913 - Robô 11",
       setor: "POLIMENTO",
     },
 
     {
-      id: 37,
+      id: 74,
       nome: "11900.914 - Robô 12",
       setor: "POLIMENTO",
     },
 
     {
-      id: 38,
+      id: 75,
       nome: "11900.915 - Robô 13",
       setor: "POLIMENTO",
     },
 
     {
-      id: 39,
+      id: 76,
       nome: "11900.916 - Robô 14",
       setor: "POLIMENTO",
     },
 
     {
-      id: 40,
-      nome: "11900.917 - Robô 15",
+      id: 77,
+      nome: "11900.925 - Maq. lavagem Cubas",
       setor: "POLIMENTO",
     },
 
     {
-      id: 41,
-      nome: "11900.918 - Robô 16",
+      id: 78,
+      nome: "11900.926 - Hidráulica Altametal 40T",
       setor: "POLIMENTO",
     },
 
     {
-      id: 42,
-      nome: "11900.919 - Robô 17",
-      setor: "POLIMENTO",
-    },
-
-    {
-      id: 43,
-      nome: "11900.920 - Robô 18",
-      setor: "POLIMENTO",
-    },
-
-    {
-      id: 44,
-      nome: "11900.921 - Robô 19",
-      setor: "POLIMENTO",
-    },
-
-    {
-      id: 45,
-      nome: "11900.922 - Robô 20",
-      setor: "POLIMENTO",
-    },
-
-    {
-      id: 46,
-      nome: "11900.923 - Robô 21",
-      setor: "POLIMENTO",
-    },
-
-    {
-      id: 47,
-      nome: "11900.924 - Robô 22",
-      setor: "POLIMENTO",
-    },
-
-    {
-      id: 48,
-      nome: "11900.925 - Lavadora de Cubas",
-      setor: "POLIMENTO",
-    },
-
-    {
-      id: 49,
-      nome: "11900.926 - Altametal 40T",
-      setor: "POLIMENTO",
-    },
-
-    {
-      id: 50,
-      nome: "11900.927 - Jiangsu 40T",
+      id: 79,
+      nome: "11900.927 - Hidráulica Jiangsu 40T",
       setor: "POLIMENTO",
     },
 
   ];
+
+
+
+  // =====================================================
+  // AUTENTICAÇÃO
+  // =====================================================
 
   useEffect(() => {
 
@@ -350,6 +574,12 @@ function App() {
     return () => unsubscribe();
 
   }, []);
+
+
+
+  // =====================================================
+  // FIREBASE REALTIME
+  // =====================================================
 
   useEffect(() => {
 
@@ -377,76 +607,11 @@ function App() {
 
   }, []);
 
-  const getStatusAtual = (nomeMaquina) => {
 
-    const ultimoEvento =
-      historico.find(
-        (item) =>
-          item.maquina === nomeMaquina
-      );
 
-    return (
-      ultimoEvento?.novoStatus ||
-      "Funcionando"
-    );
-  };
-
-  const maquinasFiltradas =
-    maquinas.filter((m) => {
-
-      const setorOk =
-        filtroSetor === "TODOS"
-          ? true
-          : m.setor === filtroSetor;
-
-      const maquinaOk =
-        filtroMaquina === "TODAS"
-          ? true
-          : m.nome === filtroMaquina;
-
-      return setorOk && maquinaOk;
-
-    });
-
-  async function alterarStatus(
-    maquina,
-    novoStatus
-  ) {
-
-    const ultimoStatus =
-      historico.find(
-        (item) =>
-          item.maquina === maquina.nome
-      );
-
-    await addDoc(
-      collection(db, "historico"),
-      {
-
-        maquina: maquina.nome,
-
-        setor: maquina.setor,
-
-        statusAnterior:
-          ultimoStatus?.novoStatus ||
-          "Funcionando",
-
-        novoStatus,
-
-        operador:
-          usuario?.email ||
-          "Operador",
-
-        dataHora:
-          new Date().toLocaleString(
-            "pt-BR"
-          ),
-
-        timestamp: Date.now(),
-
-      }
-    );
-  }
+  // =====================================================
+  // LOGIN
+  // =====================================================
 
   async function fazerLogin() {
 
@@ -467,11 +632,135 @@ function App() {
     }
   }
 
+
+
+  // =====================================================
+  // LOGOUT
+  // =====================================================
+
   async function sair() {
 
     await signOut(auth);
 
   }
+
+
+
+  // =====================================================
+  // STATUS ATUAL
+  // =====================================================
+
+  function getStatusAtual(nomeMaquina) {
+
+    const ultimoEvento =
+      historico.find(
+        (item) =>
+          item.maquina === nomeMaquina
+      );
+
+    return (
+      ultimoEvento?.novoStatus ||
+      "Funcionando"
+    );
+  }
+
+
+
+  // =====================================================
+  // CLASSE STATUS
+  // =====================================================
+
+  function getClasseStatus(status) {
+
+    if (status === "Funcionando") {
+      return "funcionando";
+    }
+
+    if (status === "Parado") {
+      return "parado";
+    }
+
+    if (status === "Setup") {
+      return "setup";
+    }
+
+    return "manutencao";
+  }
+
+
+
+  // =====================================================
+  // ALTERAR STATUS
+  // =====================================================
+
+  async function alterarStatus(
+    maquina,
+    novoStatus
+  ) {
+
+    const ultimoEvento =
+      historico.find(
+        (item) =>
+          item.maquina === maquina.nome
+      );
+
+    await addDoc(
+      collection(db, "historico"),
+      {
+
+        maquina: maquina.nome,
+
+        setor: maquina.setor,
+
+        statusAnterior:
+          ultimoEvento?.novoStatus ||
+          "Funcionando",
+
+        novoStatus,
+
+        operador:
+          usuario?.email ||
+          "Operador",
+
+        dataHora:
+          new Date().toLocaleString(
+            "pt-BR"
+          ),
+
+        timestamp: Date.now(),
+
+      }
+    );
+  }
+
+
+
+  // =====================================================
+  // FILTROS
+  // =====================================================
+
+  const maquinasFiltradas =
+    maquinas.filter((m) => {
+
+      const setorOk =
+        filtroSetor === "TODOS"
+          ? true
+          : m.setor === filtroSetor;
+
+      const maquinaOk =
+        filtroMaquina === "TODAS"
+          ? true
+          : m.nome === filtroMaquina;
+
+      return setorOk && maquinaOk;
+
+    });
+
+
+
+  // =====================================================
+  // LOGIN SCREEN
+  // =====================================================
 
   if (!usuario) {
 
@@ -479,34 +768,48 @@ function App() {
 
       <div className="login-container">
 
-        <h1>Plant Monitor</h1>
+        <div className="login-box">
 
-        <input
-          type="email"
-          placeholder="E-mail"
-          value={email}
-          onChange={(e) =>
-            setEmail(e.target.value)
-          }
-        />
+          <h1>Plant Monitor</h1>
 
-        <input
-          type="password"
-          placeholder="Senha"
-          value={senha}
-          onChange={(e) =>
-            setSenha(e.target.value)
-          }
-        />
+          <p>
+            Controle manual de funcionamento dos equipamentos
+          </p>
 
-        <button onClick={fazerLogin}>
-          Entrar
-        </button>
+          <input
+            type="email"
+            placeholder="E-mail"
+            value={email}
+            onChange={(e) =>
+              setEmail(e.target.value)
+            }
+          />
+
+          <input
+            type="password"
+            placeholder="Senha"
+            value={senha}
+            onChange={(e) =>
+              setSenha(e.target.value)
+            }
+          />
+
+          <button onClick={fazerLogin}>
+            Entrar
+          </button>
+
+        </div>
 
       </div>
 
     );
   }
+
+
+
+  // =====================================================
+  // DASHBOARD
+  // =====================================================
 
   return (
 
@@ -538,6 +841,10 @@ function App() {
 
       </div>
 
+
+
+      {/* FILTROS */}
+
       <div className="filtros">
 
         <select
@@ -561,6 +868,10 @@ function App() {
             ESTAMPAGEM
           </option>
 
+          <option value="CORTE CANTO/FURO MIOLO">
+            CORTE CANTO/FURO MIOLO
+          </option>
+
           <option value="DOBRA">
             DOBRA
           </option>
@@ -569,8 +880,12 @@ function App() {
             SOLDA
           </option>
 
-          <option value="POLIMENTO">
-            POLIMENTO
+          <option value="LIXA/ACABAMENTO">
+            LIXA/ACABAMENTO
+          </option>
+
+          <option value="TANQUES">
+            TANQUES
           </option>
 
           <option value="REVESTIMENTO">
@@ -581,7 +896,13 @@ function App() {
             EMBALAGEM
           </option>
 
+          <option value="POLIMENTO">
+            POLIMENTO
+          </option>
+
         </select>
+
+
 
         <select
           value={filtroMaquina}
@@ -611,10 +932,19 @@ function App() {
 
       </div>
 
+
+
+      {/* GRID */}
+
       <div className="grid">
 
         {maquinasFiltradas.map(
           (maquina) => {
+
+            const statusAtual =
+              getStatusAtual(
+                maquina.nome
+              );
 
             const historicoMaquina =
               historico.filter(
@@ -646,21 +976,25 @@ function App() {
 
                 </p>
 
+
+
+                {/* STATUS */}
+
                 <div
-                  className={`status ${getStatusAtual(maquina.nome)
-                    .toLowerCase()
-                    .replace("ç", "c")
-                    .replace("ã", "a")
-                  }`}
+                  className={`status ${getClasseStatus(statusAtual)}`}
                 >
 
-                  <span className="status-indicator"></span>
+                  <div className="status-circle"></div>
 
                   <span>
-                    {getStatusAtual(maquina.nome)}
+                    {statusAtual}
                   </span>
 
                 </div>
+
+
+
+                {/* BOTÕES */}
 
                 <div className="botoes">
 
@@ -714,6 +1048,10 @@ function App() {
 
                 </div>
 
+
+
+                {/* HISTÓRICO */}
+
                 <div className="historico-maquina">
 
                   <h4>
@@ -725,11 +1063,13 @@ function App() {
                     .map((item) => (
 
                       <div
-                        className="evento-item"
                         key={item.id}
+                        className="evento-item"
                       >
 
-                        {item.novoStatus}
+                        <strong>
+                          {item.novoStatus}
+                        </strong>
 
                         {" - "}
 
