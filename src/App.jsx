@@ -98,162 +98,240 @@ function App() {
 
     {
       id: 11,
+      nome: "11400.403 - Dobradeira Gasparini",
+      setor: "DOBRA",
+    },
+
+    {
+      id: 12,
       nome: "11500.501 - Solda Apes-1",
       setor: "SOLDA",
     },
 
     {
-      id: 12,
+      id: 13,
       nome: "11500.502 - Solda Robotizada Fanuc",
       setor: "SOLDA",
     },
 
     {
-      id: 13,
+      id: 14,
+      nome: "11500.503 - Solda MIG Manual",
+      setor: "SOLDA",
+    },
+
+    {
+      id: 15,
+      nome: "11500.504 - Solda TIG",
+      setor: "SOLDA",
+    },
+
+    {
+      id: 16,
       nome: "11600.601 - Acabamento Apes DRX-1",
       setor: "POLIMENTO",
     },
 
     {
-      id: 14,
+      id: 17,
       nome: "11600.602 - Politriz Manual",
       setor: "POLIMENTO",
     },
 
     {
-      id: 15,
+      id: 18,
       nome: "11700.701 - Aglomerado",
       setor: "REVESTIMENTO",
     },
 
     {
-      id: 16,
+      id: 19,
       nome: "11700.702 - Revestidora UV",
       setor: "REVESTIMENTO",
     },
 
     {
-      id: 17,
+      id: 20,
+      nome: "11700.703 - Revestidora Automática",
+      setor: "REVESTIMENTO",
+    },
+
+    {
+      id: 21,
       nome: "11800.801 - Embaladeira Projepack",
       setor: "EMBALAGEM",
     },
 
     {
-      id: 18,
+      id: 22,
       nome: "11800.802 - Paletizadora",
       setor: "EMBALAGEM",
     },
 
     {
-      id: 19,
+      id: 23,
+      nome: "11800.803 - Envolvedora Stretch",
+      setor: "EMBALAGEM",
+    },
+
+    {
+      id: 24,
       nome: "11900.901 - Polimento Motores",
       setor: "POLIMENTO",
     },
 
     {
-      id: 20,
+      id: 25,
       nome: "11900.902 - Polimento Lucson",
       setor: "POLIMENTO",
     },
 
     {
-      id: 21,
+      id: 26,
       nome: "11900.903 - Robô 01",
       setor: "POLIMENTO",
     },
 
     {
-      id: 22,
+      id: 27,
       nome: "11900.904 - Robô 02",
       setor: "POLIMENTO",
     },
 
     {
-      id: 23,
+      id: 28,
       nome: "11900.905 - Robô 03",
       setor: "POLIMENTO",
     },
 
     {
-      id: 24,
+      id: 29,
       nome: "11900.906 - Robô 04",
       setor: "POLIMENTO",
     },
 
     {
-      id: 25,
+      id: 30,
       nome: "11900.907 - Robô 05",
       setor: "POLIMENTO",
     },
 
     {
-      id: 26,
+      id: 31,
       nome: "11900.908 - Robô 06",
       setor: "POLIMENTO",
     },
 
     {
-      id: 27,
+      id: 32,
       nome: "11900.909 - Robô 07",
       setor: "POLIMENTO",
     },
 
     {
-      id: 28,
+      id: 33,
       nome: "11900.910 - Robô 08",
       setor: "POLIMENTO",
     },
 
     {
-      id: 29,
+      id: 34,
       nome: "11900.911 - Robô 09",
       setor: "POLIMENTO",
     },
 
     {
-      id: 30,
+      id: 35,
       nome: "11900.912 - Robô 10",
       setor: "POLIMENTO",
     },
 
     {
-      id: 31,
+      id: 36,
       nome: "11900.913 - Robô 11",
       setor: "POLIMENTO",
     },
 
     {
-      id: 32,
+      id: 37,
       nome: "11900.914 - Robô 12",
       setor: "POLIMENTO",
     },
 
     {
-      id: 33,
+      id: 38,
       nome: "11900.915 - Robô 13",
       setor: "POLIMENTO",
     },
 
     {
-      id: 34,
+      id: 39,
       nome: "11900.916 - Robô 14",
       setor: "POLIMENTO",
     },
 
     {
-      id: 35,
+      id: 40,
+      nome: "11900.917 - Robô 15",
+      setor: "POLIMENTO",
+    },
+
+    {
+      id: 41,
+      nome: "11900.918 - Robô 16",
+      setor: "POLIMENTO",
+    },
+
+    {
+      id: 42,
+      nome: "11900.919 - Robô 17",
+      setor: "POLIMENTO",
+    },
+
+    {
+      id: 43,
+      nome: "11900.920 - Robô 18",
+      setor: "POLIMENTO",
+    },
+
+    {
+      id: 44,
+      nome: "11900.921 - Robô 19",
+      setor: "POLIMENTO",
+    },
+
+    {
+      id: 45,
+      nome: "11900.922 - Robô 20",
+      setor: "POLIMENTO",
+    },
+
+    {
+      id: 46,
+      nome: "11900.923 - Robô 21",
+      setor: "POLIMENTO",
+    },
+
+    {
+      id: 47,
+      nome: "11900.924 - Robô 22",
+      setor: "POLIMENTO",
+    },
+
+    {
+      id: 48,
       nome: "11900.925 - Lavadora de Cubas",
       setor: "POLIMENTO",
     },
 
     {
-      id: 36,
+      id: 49,
       nome: "11900.926 - Altametal 40T",
       setor: "POLIMENTO",
     },
 
     {
-      id: 37,
+      id: 50,
       nome: "11900.927 - Jiangsu 40T",
       setor: "POLIMENTO",
     },
@@ -595,9 +673,7 @@ function App() {
                       )
                     }
                   >
-
                     Funcionando
-
                   </button>
 
                   <button
@@ -609,9 +685,7 @@ function App() {
                       )
                     }
                   >
-
                     Parado
-
                   </button>
 
                   <button
@@ -623,9 +697,7 @@ function App() {
                       )
                     }
                   >
-
                     Setup
-
                   </button>
 
                   <button
@@ -637,9 +709,7 @@ function App() {
                       )
                     }
                   >
-
                     Manutenção
-
                   </button>
 
                 </div>
