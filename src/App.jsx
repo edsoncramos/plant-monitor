@@ -9,9 +9,24 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 
-import { db } from "./firebase";
+import {
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut,
+} from "firebase/auth";
+
+import {
+  db,
+  auth,
+} from "./firebase";
 
 function App() {
+
+  const [usuario, setUsuario] = useState(null);
+
+  const [email, setEmail] = useState("");
+
+  const [senha, setSenha] = useState("");
 
   const maquinasIniciais = [
     {
@@ -317,6 +332,21 @@ function App() {
 
   useEffect(() => {
 
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (user) => {
+        setUsuario(user);
+      }
+    );
+
+    return () => unsubscribe();
+
+  }, []);
+
+  useEffect(() => {
+
+    if (!usuario) return;
+
     const unsubscribeMaquinas = onSnapshot(
       collection(db, "maquinas"),
       (snapshot) => {
@@ -358,22 +388,19 @@ function App() {
       unsubscribeHistorico();
     };
 
-  }, []);
+  }, [usuario]);
 
   useEffect(() => {
 
     const salvarMaquinas = async () => {
 
-      const snapshot = await onSnapshot(
-        collection(db, "maquinas"),
-        () => {}
-      );
-
-      snapshot();
-
       maquinasIniciais.forEach(async (maq) => {
 
-        const ref = doc(db, "maquinas", String(maq.id));
+        const ref = doc(
+          db,
+          "maquinas",
+          String(maq.id)
+        );
 
         await setDoc(ref, maq);
 
@@ -384,6 +411,30 @@ function App() {
     salvarMaquinas();
 
   }, []);
+
+  const login = async () => {
+
+    try {
+
+      await signInWithEmailAndPassword(
+        auth,
+        email,
+        senha
+      );
+
+    } catch {
+
+      alert("Login inválido");
+
+    }
+
+  };
+
+  const logout = async () => {
+
+    await signOut(auth);
+
+  };
 
   const alterarStatus = async (
     id,
@@ -406,26 +457,128 @@ function App() {
       maquinaAtualizada
     );
 
-    await addDoc(collection(db, "historico"), {
-      maquina: maquinaAtual.nome,
-      setor: maquinaAtual.setor,
-      statusAnterior: maquinaAtual.status,
-      novoStatus: novoStatus,
-      operador: "Edson",
-      dataHora: new Date().toLocaleString("pt-BR"),
-      dataCompleta: new Date().toISOString(),
-    });
+    await addDoc(
+      collection(db, "historico"),
+      {
+        maquina: maquinaAtual.nome,
+        setor: maquinaAtual.setor,
+        statusAnterior: maquinaAtual.status,
+        novoStatus: novoStatus,
+        operador: usuario.email,
+        dataHora: new Date().toLocaleString("pt-BR"),
+        dataCompleta: new Date().toISOString(),
+      }
+    );
 
   };
+
+  if (!usuario) {
+
+    return (
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          flexDirection: "column",
+          gap: "15px",
+        }}
+      >
+
+        <h1>Plant Monitor Login</h1>
+
+        <input
+          type="email"
+          placeholder="E-mail"
+          value={email}
+          onChange={(e) =>
+            setEmail(e.target.value)
+          }
+          style={{
+            padding: "12px",
+            width: "300px",
+          }}
+        />
+
+        <input
+          type="password"
+          placeholder="Senha"
+          value={senha}
+          onChange={(e) =>
+            setSenha(e.target.value)
+          }
+          style={{
+            padding: "12px",
+            width: "300px",
+          }}
+        />
+
+        <button
+          onClick={login}
+          style={{
+            padding: "12px 20px",
+            background: "#2563eb",
+            color: "white",
+            border: "none",
+            borderRadius: "8px",
+            cursor: "pointer",
+          }}
+        >
+          Entrar
+        </button>
+
+      </div>
+
+    );
+
+  }
 
   return (
     <div className="container">
 
-      <h1>Plant Monitor</h1>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
 
-      <p className="subtitulo">
-        Controle manual de funcionamento dos equipamentos
-      </p>
+        <div>
+
+          <h1>Plant Monitor</h1>
+
+          <p className="subtitulo">
+            Controle manual de funcionamento dos equipamentos
+          </p>
+
+        </div>
+
+        <div>
+
+          <p>
+            <strong>Operador:</strong> {usuario.email}
+          </p>
+
+          <button
+            onClick={logout}
+            style={{
+              background: "#ef4444",
+              color: "white",
+              border: "none",
+              padding: "10px",
+              borderRadius: "8px",
+              cursor: "pointer",
+            }}
+          >
+            Sair
+          </button>
+
+        </div>
+
+      </div>
 
       <div className="grid">
 
