@@ -568,7 +568,7 @@ function App() {
 
                 </p>
 
-                <p
+                <div
                   className={`status ${getStatusAtual(maquina.nome)
                     .toLowerCase()
                     .replace("ç", "c")
@@ -578,9 +578,11 @@ function App() {
 
                   <span className="status-indicator"></span>
 
-                  {getStatusAtual(maquina.nome)}
+                  <span>
+                    {getStatusAtual(maquina.nome)}
+                  </span>
 
-                </p>
+                </div>
 
                 <div className="botoes">
 
