@@ -1,3 +1,5 @@
+// App.jsx
+
 import { useEffect, useState } from "react";
 
 import {
@@ -6,6 +8,9 @@ import {
   onSnapshot,
   query,
   orderBy,
+  getDocs,
+  deleteDoc,
+  doc,
 } from "firebase/firestore";
 
 import {
@@ -296,7 +301,7 @@ function App() {
 
 
 
-    // LIXA/ACABAMENTO
+    // LIXA / ACABAMENTO
 
     {
       id: 40,
@@ -559,27 +564,24 @@ function App() {
 
 
   // =====================================================
-  // AUTENTICAÇÃO
+  // FIREBASE REALTIME
   // =====================================================
 
   useEffect(() => {
 
-    const unsubscribe =
+    const unsubscribeAuth =
       onAuthStateChanged(auth, (user) => {
 
         setUsuario(user);
 
       });
 
-    return () => unsubscribe();
+    return () => unsubscribeAuth();
 
   }, []);
 
 
 
-  // =====================================================
-  // FIREBASE REALTIME
-  // =====================================================
 
   useEffect(() => {
 
@@ -609,6 +611,7 @@ function App() {
 
 
 
+
   // =====================================================
   // LOGIN
   // =====================================================
@@ -634,6 +637,7 @@ function App() {
 
 
 
+
   // =====================================================
   // LOGOUT
   // =====================================================
@@ -646,8 +650,47 @@ function App() {
 
 
 
+
   // =====================================================
-  // STATUS ATUAL
+  // RESET HISTÓRICO
+  // =====================================================
+
+  async function resetarHistorico() {
+
+    const confirmar =
+      window.confirm(
+        "Deseja apagar todo o histórico?"
+      );
+
+    if (!confirmar) return;
+
+    const snapshot =
+      await getDocs(
+        collection(db, "historico")
+      );
+
+    const deletar =
+      snapshot.docs.map((item) =>
+        deleteDoc(
+          doc(
+            db,
+            "historico",
+            item.id
+          )
+        )
+      );
+
+    await Promise.all(deletar);
+
+    alert("Histórico resetado");
+
+  }
+
+
+
+
+  // =====================================================
+  // STATUS
   // =====================================================
 
   function getStatusAtual(nomeMaquina) {
@@ -666,9 +709,6 @@ function App() {
 
 
 
-  // =====================================================
-  // CLASSE STATUS
-  // =====================================================
 
   function getClasseStatus(status) {
 
@@ -686,6 +726,7 @@ function App() {
 
     return "manutencao";
   }
+
 
 
 
@@ -735,6 +776,7 @@ function App() {
 
 
 
+
   // =====================================================
   // FILTROS
   // =====================================================
@@ -755,6 +797,7 @@ function App() {
       return setorOk && maquinaOk;
 
     });
+
 
 
 
@@ -807,6 +850,7 @@ function App() {
 
 
 
+
   // =====================================================
   // DASHBOARD
   // =====================================================
@@ -829,17 +873,32 @@ function App() {
 
         <div className="usuario-box">
 
-          <strong>
+          <strong className="usuario-email">
             {usuario.email}
           </strong>
 
-          <button onClick={sair}>
-            Sair
-          </button>
+          <div className="acoes-topo">
+
+            <button
+              className="resetar"
+              onClick={resetarHistorico}
+            >
+              Reset Histórico
+            </button>
+
+            <button
+              className="sair-btn"
+              onClick={sair}
+            >
+              Sair
+            </button>
+
+          </div>
 
         </div>
 
       </div>
+
 
 
 
@@ -860,47 +919,21 @@ function App() {
             TODOS SETORES
           </option>
 
-          <option value="CORTE">
-            CORTE
-          </option>
+          {[...new Set(
+            maquinas.map((m) => m.setor)
+          )].map((setor) => (
 
-          <option value="ESTAMPAGEM">
-            ESTAMPAGEM
-          </option>
+            <option
+              key={setor}
+              value={setor}
+            >
+              {setor}
+            </option>
 
-          <option value="CORTE CANTO/FURO MIOLO">
-            CORTE CANTO/FURO MIOLO
-          </option>
-
-          <option value="DOBRA">
-            DOBRA
-          </option>
-
-          <option value="SOLDA">
-            SOLDA
-          </option>
-
-          <option value="LIXA/ACABAMENTO">
-            LIXA/ACABAMENTO
-          </option>
-
-          <option value="TANQUES">
-            TANQUES
-          </option>
-
-          <option value="REVESTIMENTO">
-            REVESTIMENTO
-          </option>
-
-          <option value="EMBALAGEM">
-            EMBALAGEM
-          </option>
-
-          <option value="POLIMENTO">
-            POLIMENTO
-          </option>
+          ))}
 
         </select>
+
 
 
 
@@ -931,6 +964,7 @@ function App() {
         </select>
 
       </div>
+
 
 
 
@@ -978,6 +1012,7 @@ function App() {
 
 
 
+
                 {/* STATUS */}
 
                 <div
@@ -991,6 +1026,7 @@ function App() {
                   </span>
 
                 </div>
+
 
 
 
@@ -1047,6 +1083,7 @@ function App() {
                   </button>
 
                 </div>
+
 
 
 
