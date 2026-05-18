@@ -1,289 +1,757 @@
+/* =====================================================
+RESET
+===================================================== */
 
-body {
+* {
   margin: 0;
   padding: 0;
-  background: #f1f5f9;
-  font-family: Arial, Helvetica, sans-serif;
+  box-sizing: border-box;
 }
+
+
+
+/* =====================================================
+BODY
+===================================================== */
+
+body {
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  background: #ececec;
+
+  color: #1f2937;
+}
+
+
+
+/* =====================================================
+CONTAINER
+===================================================== */
 
 .container {
-  padding: 30px;
+
+  width: 100%;
+
+  max-width: 1700px;
+
+  margin: auto;
+
+  padding: 20px;
 }
 
 
 
-/* TOPO */
+/* =====================================================
+TOPO
+===================================================== */
 
 .topo {
+
   display: flex;
+
   justify-content: space-between;
+
   align-items: flex-start;
+
+  gap: 20px;
+
   margin-bottom: 30px;
 }
 
 .topo h1 {
+
   font-size: 72px;
-  margin: 0;
+
   line-height: 1;
+
   color: #0f172a;
 }
 
 .topo p {
-  margin-top: 10px;
+
   font-size: 20px;
+
+  color: #64748b;
+
+  margin-top: 8px;
+}
+
+
+
+/* =====================================================
+USUÁRIO
+===================================================== */
+
+.usuario-box {
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: flex-end;
+
+  gap: 15px;
+}
+
+.usuario-email {
+
+  font-size: 18px;
+
   color: #64748b;
 }
 
 
 
-/* USUÁRIO */
-
-.usuario-box {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 15px;
-}
-
-.usuario-email {
-  font-size: 18px;
-  color: #475569;
-}
+/* =====================================================
+AÇÕES TOPO
+===================================================== */
 
 .acoes-topo {
+
   display: flex;
+
+  flex-wrap: wrap;
+
   gap: 10px;
 }
 
+.acoes-topo button {
 
+  border: none;
 
-/* BOTÕES SUPERIORES */
-
-.resetar {
-  background: #1e293b;
   color: white;
+
+  padding: 12px 22px;
+
+  border-radius: 12px;
+
+  cursor: pointer;
+
+  font-size: 16px;
+
+  font-weight: bold;
+
+  transition: 0.2s;
 }
 
-.resetar:hover {
-  opacity: 0.9;
+.acoes-topo button:hover {
+
+  transform: scale(1.03);
+}
+
+
+
+/* =====================================================
+BOTÕES TOPO
+===================================================== */
+
+.tv-btn {
+
+  background: #2563eb;
+}
+
+.resetar {
+
+  background: #111827;
 }
 
 .sair-btn {
+
   background: #ef4444;
-  color: white;
-}
-
-.sair-btn:hover {
-  opacity: 0.9;
 }
 
 
 
-/* FILTROS */
+/* =====================================================
+FILTROS
+===================================================== */
 
 .filtros {
+
   display: flex;
+
   gap: 20px;
+
+  flex-wrap: wrap;
+
   margin-bottom: 30px;
 }
 
 .filtros select {
-  padding: 14px;
+
+  padding: 15px;
+
   border-radius: 12px;
+
   border: 1px solid #cbd5e1;
-  min-width: 280px;
-  font-size: 16px;
+
+  min-width: 320px;
+
+  font-size: 18px;
+
+  background: white;
+
+  color: #1e293b;
 }
 
 
 
-/* GRID */
+/* =====================================================
+GRID
+===================================================== */
 
 .grid {
+
   display: grid;
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(450px, 1fr)
-  );
+
+  grid-template-columns:
+    repeat(auto-fit, minmax(500px, 1fr));
+
   gap: 30px;
 }
 
 
 
-/* CARD */
+/* =====================================================
+CARD
+===================================================== */
 
 .card {
+
   background: white;
-  border-radius: 24px;
+
+  border-radius: 25px;
+
   padding: 30px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+
+  transition: 0.3s;
+
+  min-height: 500px;
 }
 
 .card h2 {
-  font-size: 24px;
+
   text-align: center;
-  margin-bottom: 20px;
+
+  font-size: 28px;
+
+  margin-bottom: 25px;
+
+  color: #0f172a;
 }
 
 .card p {
+
   text-align: center;
+
   font-size: 18px;
-}
 
-
-
-/* STATUS */
-
-.status {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 14px;
-  margin: 30px 0;
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.status-circle {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-}
-
-
-
-/* CORES STATUS */
-
-.status.funcionando {
-  color: #22c55e;
-}
-
-.status.funcionando .status-circle {
-  background: #22c55e;
-}
-
-.status.parado {
-  color: #ef4444;
-}
-
-.status.parado .status-circle {
-  background: #ef4444;
-}
-
-.status.setup {
-  color: #f59e0b;
-}
-
-.status.setup .status-circle {
-  background: #f59e0b;
-}
-
-.status.manutencao {
   color: #64748b;
-}
 
-.status.manutencao .status-circle {
-  background: #64748b;
-}
-
-
-
-/* BOTÕES */
-
-.botoes {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-button {
-  border: none;
-  border-radius: 12px;
-  padding: 14px 22px;
-  color: white;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-}
-
-button:hover {
-  opacity: 0.9;
-}
-
-.funcionando {
-  background: #22c55e;
-}
-
-.parado {
-  background: #ef4444;
-}
-
-.setup {
-  background: #f59e0b;
-}
-
-.manutencao {
-  background: #64748b;
-}
-
-
-
-/* HISTÓRICO */
-
-.historico-maquina {
-  margin-top: 30px;
-  border-top: 1px solid #e2e8f0;
-  padding-top: 20px;
-}
-
-.historico-maquina h4 {
-  text-align: center;
-  font-size: 24px;
   margin-bottom: 20px;
 }
 
-.evento-item {
-  padding: 8px 0;
+
+
+/* =====================================================
+STATUS
+===================================================== */
+
+.status-box {
+
+  margin: 25px 0;
+}
+
+.status-linha {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 12px;
+}
+
+.status-circle {
+
+  width: 20px;
+
+  height: 20px;
+
+  border-radius: 50%;
+
+  animation: pulse 1.5s infinite;
+}
+
+.status-texto {
+
+  font-size: 30px;
+
+  font-weight: bold;
+}
+
+.tempo-status {
+
+  margin-top: 10px;
+
   text-align: center;
-  color: #334155;
+
+  font-size: 16px;
+
+  color: #64748b;
 }
 
 
 
-/* LOGIN */
+/* =====================================================
+BOTÕES STATUS
+===================================================== */
+
+.botoes {
+
+  display: flex;
+
+  justify-content: center;
+
+  flex-wrap: wrap;
+
+  gap: 15px;
+
+  margin-top: 25px;
+}
+
+.botoes button {
+
+  border: none;
+
+  color: white;
+
+  padding: 16px 28px;
+
+  border-radius: 14px;
+
+  font-size: 18px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.botoes button:hover {
+
+  transform: scale(1.05);
+}
+
+
+
+/* =====================================================
+CORES BOTÕES
+===================================================== */
+
+button.funcionando {
+
+  background: #22c55e;
+}
+
+button.parado {
+
+  background: #ef4444;
+}
+
+button.setup {
+
+  background: #f59e0b;
+}
+
+button.manutencao {
+
+  background: #6b7280;
+}
+
+
+
+/* =====================================================
+STATUS VISUAL
+===================================================== */
+
+/* FUNCIONANDO */
+
+.funcionando .status-circle {
+
+  background: #22c55e;
+}
+
+.card.funcionando {
+
+  border: 4px solid #22c55e;
+}
+
+
+
+/* PARADO */
+
+.parado .status-circle {
+
+  background: #ef4444;
+}
+
+.card.parado {
+
+  border: 4px solid #ef4444;
+
+  animation:
+    alertaParado 1s infinite;
+}
+
+
+
+/* SETUP */
+
+.setup .status-circle {
+
+  background: #f59e0b;
+}
+
+.card.setup {
+
+  border: 4px solid #f59e0b;
+}
+
+
+
+/* MANUTENÇÃO */
+
+.manutencao .status-circle {
+
+  background: #6b7280;
+}
+
+.card.manutencao {
+
+  border: 4px solid #6b7280;
+}
+
+
+
+/* =====================================================
+HISTÓRICO
+===================================================== */
+
+.historico-maquina {
+
+  margin-top: 35px;
+
+  border-top: 1px solid #d1d5db;
+
+  padding-top: 25px;
+}
+
+.historico-maquina h4 {
+
+  text-align: center;
+
+  font-size: 24px;
+
+  margin-bottom: 20px;
+
+  color: #0f172a;
+}
+
+.evento-item {
+
+  text-align: center;
+
+  margin-bottom: 12px;
+
+  font-size: 16px;
+
+  color: #475569;
+}
+
+
+
+/* =====================================================
+LOGIN
+===================================================== */
 
 .login-container {
+
+  width: 100%;
+
   height: 100vh;
+
   display: flex;
+
   justify-content: center;
+
   align-items: center;
 }
 
 .login-box {
+
+  width: 420px;
+
   background: white;
+
   padding: 40px;
-  border-radius: 24px;
-  width: 400px;
+
+  border-radius: 20px;
+
   display: flex;
+
   flex-direction: column;
+
   gap: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.1);
 }
 
 .login-box h1 {
-  margin: 0;
+
   text-align: center;
+
+  font-size: 42px;
+
+  color: #0f172a;
 }
 
 .login-box p {
+
   text-align: center;
+
   color: #64748b;
 }
 
 .login-box input {
-  padding: 14px;
-  border-radius: 12px;
+
+  padding: 15px;
+
+  border-radius: 10px;
+
   border: 1px solid #cbd5e1;
+
   font-size: 16px;
+}
+
+.login-box button {
+
+  border: none;
+
+  background: #2563eb;
+
+  color: white;
+
+  padding: 15px;
+
+  border-radius: 10px;
+
+  font-size: 18px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.login-box button:hover {
+
+  opacity: 0.9;
+}
+
+
+
+/* =====================================================
+MODO TV
+===================================================== */
+
+.tv-mode {
+
+  max-width: 100%;
+
+  padding: 15px;
+}
+
+.tv-mode .topo h1 {
+
+  font-size: 90px;
+}
+
+.tv-mode .topo p {
+
+  font-size: 28px;
+}
+
+.tv-mode .card {
+
+  min-height: 650px;
+
+  padding: 40px;
+}
+
+.tv-mode .card h2 {
+
+  font-size: 40px;
+}
+
+.tv-mode .card p {
+
+  font-size: 24px;
+}
+
+.tv-mode .status-texto {
+
+  font-size: 42px;
+}
+
+.tv-mode .tempo-status {
+
+  font-size: 24px;
+}
+
+.tv-mode .botoes button {
+
+  font-size: 24px;
+
+  padding: 20px 30px;
+}
+
+.tv-mode .historico-maquina h4 {
+
+  font-size: 32px;
+}
+
+.tv-mode .evento-item {
+
+  font-size: 22px;
+}
+
+.tv-mode .grid {
+
+  grid-template-columns:
+    repeat(auto-fit, minmax(700px, 1fr));
+}
+
+
+
+/* =====================================================
+ANIMAÇÕES
+===================================================== */
+
+@keyframes pulse {
+
+  0% {
+
+    transform: scale(1);
+
+    opacity: 1;
+  }
+
+  50% {
+
+    transform: scale(1.15);
+
+    opacity: 0.7;
+  }
+
+  100% {
+
+    transform: scale(1);
+
+    opacity: 1;
+  }
+}
+
+@keyframes alertaParado {
+
+  0% {
+
+    box-shadow:
+      0 0 15px rgba(239,68,68,0.4);
+  }
+
+  50% {
+
+    box-shadow:
+      0 0 35px rgba(239,68,68,0.9);
+  }
+
+  100% {
+
+    box-shadow:
+      0 0 15px rgba(239,68,68,0.4);
+  }
+}
+
+
+
+/* =====================================================
+RESPONSIVO
+===================================================== */
+
+@media (max-width: 1200px) {
+
+  .grid {
+
+    grid-template-columns:
+      repeat(auto-fit, minmax(400px, 1fr));
+  }
+
+}
+
+@media (max-width: 900px) {
+
+  .topo {
+
+    flex-direction: column;
+  }
+
+  .topo h1 {
+
+    font-size: 48px;
+  }
+
+  .topo p {
+
+    font-size: 18px;
+  }
+
+  .grid {
+
+    grid-template-columns: 1fr;
+  }
+
+  .filtros {
+
+    flex-direction: column;
+  }
+
+  .filtros select {
+
+    width: 100%;
+  }
+
+  .card {
+
+    min-height: auto;
+  }
+
+  .botoes {
+
+    flex-direction: column;
+  }
+
+  .botoes button {
+
+    width: 100%;
+  }
+
 }

@@ -1,6 +1,6 @@
 // App.jsx
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import {
   collection,
@@ -25,13 +25,17 @@ import "./App.css";
 
 function App() {
 
-  const [usuario, setUsuario] = useState(null);
+  const [usuario, setUsuario] =
+    useState(null);
 
-  const [email, setEmail] = useState("");
+  const [email, setEmail] =
+    useState("");
 
-  const [senha, setSenha] = useState("");
+  const [senha, setSenha] =
+    useState("");
 
-  const [historico, setHistorico] = useState([]);
+  const [historico, setHistorico] =
+    useState([]);
 
   const [filtroSetor, setFiltroSetor] =
     useState("TODOS");
@@ -39,10 +43,13 @@ function App() {
   const [filtroMaquina, setFiltroMaquina] =
     useState("TODAS");
 
+  const [modoTV, setModoTV] =
+    useState(false);
+
 
 
   // =====================================================
-  // MÁQUINAS
+  // EQUIPAMENTOS
   // =====================================================
 
   const maquinas = [
@@ -179,31 +186,31 @@ function App() {
 
     {
       id: 21,
-      nome: "12100.101 - Exêntrica Calvi 160T - (Dedicada N4)",
+      nome: "12100.101 - Exêntrica Calvi 160T - Dedicada N4",
       setor: "CORTE CANTO/FURO MIOLO",
     },
 
     {
       id: 22,
-      nome: "12100.102 - Exêntrica Shuller 160T - (Gentil)",
+      nome: "12100.102 - Exêntrica Shuller 160T - Gentil",
       setor: "CORTE CANTO/FURO MIOLO",
     },
 
     {
       id: 23,
-      nome: "12100.103 - Exêntrica Jiangsu 80T (Redonda)",
+      nome: "12100.103 - Exêntrica Jiangsu 80T - Redonda",
       setor: "CORTE CANTO/FURO MIOLO",
     },
 
     {
       id: 24,
-      nome: "12100.104 - Hidráulica Corte Canto (Laiser)",
+      nome: "12100.104 - Hidráulica Corte Canto - Laiser",
       setor: "CORTE CANTO/FURO MIOLO",
     },
 
     {
       id: 25,
-      nome: "12100.108 - Hidrod. Corte Canto+Logo - 2 (Ibra)",
+      nome: "12100.108 - Hidrod. Corte Canto+Logo - 2 Ibra",
       setor: "CORTE CANTO/FURO MIOLO",
     },
 
@@ -301,7 +308,7 @@ function App() {
 
 
 
-    // LIXA / ACABAMENTO
+    // LIXA/ACABAMENTO
 
     {
       id: 40,
@@ -317,7 +324,7 @@ function App() {
 
     {
       id: 42,
-      nome: "11600.606 - Acabamento Apes-2 (Franke)",
+      nome: "11600.606 - Acabamento Apes-2 Franke",
       setor: "LIXA/ACABAMENTO",
     },
 
@@ -564,7 +571,7 @@ function App() {
 
 
   // =====================================================
-  // FIREBASE REALTIME
+  // FIREBASE
   // =====================================================
 
   useEffect(() => {
@@ -626,11 +633,9 @@ function App() {
         senha
       );
 
-    } catch (error) {
+    } catch {
 
       alert("Erro no login");
-
-      console.log(error);
 
     }
   }
@@ -652,7 +657,7 @@ function App() {
 
 
   // =====================================================
-  // RESET HISTÓRICO
+  // RESET
   // =====================================================
 
   async function resetarHistorico() {
@@ -730,6 +735,36 @@ function App() {
 
 
 
+  function calcularTempo(timestamp) {
+
+    if (!timestamp) return "";
+
+    const agora = Date.now();
+
+    const diferenca =
+      agora - timestamp;
+
+    const minutos =
+      Math.floor(diferenca / 60000);
+
+    const horas =
+      Math.floor(minutos / 60);
+
+    const minutosRestantes =
+      minutos % 60;
+
+    if (horas > 0) {
+
+      return `${horas}h ${minutosRestantes}min`;
+
+    }
+
+    return `${minutos}min`;
+  }
+
+
+
+
   // =====================================================
   // ALTERAR STATUS
   // =====================================================
@@ -802,6 +837,47 @@ function App() {
 
 
   // =====================================================
+  // ORDENAÇÃO
+  // =====================================================
+
+  const maquinasOrdenadas =
+    useMemo(() => {
+
+      return [...maquinasFiltradas]
+        .sort((a, b) => {
+
+          const statusA =
+            getStatusAtual(a.nome);
+
+          const statusB =
+            getStatusAtual(b.nome);
+
+          if (
+            statusA === "Parado" &&
+            statusB !== "Parado"
+          ) {
+            return -1;
+          }
+
+          if (
+            statusB === "Parado" &&
+            statusA !== "Parado"
+          ) {
+            return 1;
+          }
+
+          return 0;
+        });
+
+    }, [
+      maquinasFiltradas,
+      historico,
+    ]);
+
+
+
+
+  // =====================================================
   // LOGIN SCREEN
   // =====================================================
 
@@ -816,7 +892,7 @@ function App() {
           <h1>Plant Monitor</h1>
 
           <p>
-            Controle manual de funcionamento dos equipamentos
+            Controle industrial em tempo real
           </p>
 
           <input
@@ -857,7 +933,11 @@ function App() {
 
   return (
 
-    <div className="container">
+    <div
+      className={`container ${
+        modoTV ? "tv-mode" : ""
+      }`}
+    >
 
       <div className="topo">
 
@@ -878,6 +958,17 @@ function App() {
           </strong>
 
           <div className="acoes-topo">
+
+            <button
+              className="tv-btn"
+              onClick={() =>
+                setModoTV(!modoTV)
+              }
+            >
+              {modoTV
+                ? "Modo Normal"
+                : "Modo TV"}
+            </button>
 
             <button
               className="resetar"
@@ -920,7 +1011,9 @@ function App() {
           </option>
 
           {[...new Set(
-            maquinas.map((m) => m.setor)
+            maquinas.map(
+              (m) => m.setor
+            )
           )].map((setor) => (
 
             <option
@@ -972,12 +1065,23 @@ function App() {
 
       <div className="grid">
 
-        {maquinasFiltradas.map(
+        {maquinasOrdenadas.map(
           (maquina) => {
 
+            const ultimoEvento =
+              historico.find(
+                (item) =>
+                  item.maquina ===
+                  maquina.nome
+              );
+
             const statusAtual =
-              getStatusAtual(
-                maquina.nome
+              ultimoEvento?.novoStatus ||
+              "Funcionando";
+
+            const tempoStatus =
+              calcularTempo(
+                ultimoEvento?.timestamp
               );
 
             const historicoMaquina =
@@ -990,7 +1094,7 @@ function App() {
             return (
 
               <div
-                className="card"
+                className={`card ${getClasseStatus(statusAtual)}`}
                 key={maquina.id}
               >
 
@@ -1016,14 +1120,24 @@ function App() {
                 {/* STATUS */}
 
                 <div
-                  className={`status ${getClasseStatus(statusAtual)}`}
+                  className={`status-box ${getClasseStatus(statusAtual)}`}
                 >
 
-                  <div className="status-circle"></div>
+                  <div className="status-linha">
 
-                  <span>
-                    {statusAtual}
-                  </span>
+                    <div className="status-circle"></div>
+
+                    <span className="status-texto">
+                      {statusAtual}
+                    </span>
+
+                  </div>
+
+                  <div className="tempo-status">
+
+                    há {tempoStatus}
+
+                  </div>
 
                 </div>
 
