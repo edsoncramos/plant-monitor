@@ -23,6 +23,9 @@ import KPICards from "./components/KPICards";
 import { db, auth } from "./firebase";
 import { maquinas } from "./data/maquinas";
 
+import { calcularTempoProdutivo }
+from "./utils/calculoTurno";
+
 import "./App.css";
 
 const motivosParada = [
@@ -225,33 +228,6 @@ function App() {
     return "manutencao";
   }
 
-  function calcularTempo(timestamp) {
-
-    if (!timestamp) return "";
-
-    const agora = Date.now();
-
-    const diferenca =
-      agora - timestamp;
-
-    const minutos =
-      Math.floor(diferenca / 60000);
-
-    const horas =
-      Math.floor(minutos / 60);
-
-    const minutosRestantes =
-      minutos % 60;
-
-    if (horas > 0) {
-
-      return `${horas}h ${minutosRestantes}min`;
-
-    }
-
-    return `${minutos}min`;
-  }
-
   // =====================================================
   // ALTERAR STATUS
   // =====================================================
@@ -263,6 +239,11 @@ function App() {
   ) {
 
     try {
+
+      console.log(
+        "Salvando motivo:",
+        motivo
+      );
 
       const ultimoEvento =
         historico.find(
@@ -333,8 +314,14 @@ function App() {
     motivo
   ) {
 
-    if (!maquinaSelecionada)
+    if (!maquinaSelecionada) {
       return;
+    }
+
+    console.log(
+      "Motivo selecionado:",
+      motivo
+    );
 
     await alterarStatus(
       maquinaSelecionada,
@@ -664,7 +651,7 @@ function App() {
               "Funcionando";
 
             const tempoStatus =
-              calcularTempo(
+              calcularTempoProdutivo(
                 ultimoEvento?.timestamp
               );
 
