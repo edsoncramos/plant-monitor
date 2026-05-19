@@ -4,31 +4,30 @@ function ParetoPerdas({
 
   const motivos = {};
 
-
-
   historico.forEach((evento) => {
 
     if (
       evento.novoStatus === "Parado" &&
-      evento.motivoParada
+      evento.motivo
     ) {
 
       const motivo =
-        evento.motivoParada;
+        evento.motivo;
 
       motivos[motivo] =
         (motivos[motivo] || 0) + 1;
     }
   });
 
-
-
   const ranking =
     Object.entries(motivos)
 
       .sort((a, b) => b[1] - a[1]);
 
-
+  const maiorValor =
+    ranking.length > 0
+      ? ranking[0][1]
+      : 1;
 
   return (
 
@@ -38,18 +37,13 @@ function ParetoPerdas({
         Pareto de Perdas
       </h2>
 
-
-
       {ranking.length === 0 && (
 
         <p className="sem-dados">
-
           Sem dados de parada
-
         </p>
+
       )}
-
-
 
       {ranking.map(([motivo, total]) => (
 
@@ -74,17 +68,22 @@ function ParetoPerdas({
 
             <div
               className="pareto-barra"
+
               style={{
-                width: `${total * 10}px`,
+                width: `${
+                  (total / maiorValor) * 100
+                }%`,
               }}
             />
 
           </div>
 
         </div>
+
       ))}
 
     </div>
+
   );
 }
 
