@@ -36,11 +36,11 @@ CONTAINER
 
   width: 100%;
 
-  max-width: 1700px;
+  min-height: 100vh;
 
-  margin: auto;
+  padding: 20px 25px;
 
-  padding: 20px;
+  margin: 0 auto;
 }
 
 
