@@ -17,15 +17,29 @@ import {
   signOut,
 } from "firebase/auth";
 
-import { db, auth } from "./firebase";
-
-import { maquinas } from "./data/maquinas";
-
+import ParetoPerdas from "./components/ParetoPerdas";
 import KPICards from "./components/KPICards";
+
+import { db, auth } from "./firebase";
+import { maquinas } from "./data/maquinas";
 
 import "./App.css";
 
+const motivosParada = [
+  "Falta material",
+  "Setup",
+  "Qualidade",
+  "Ferramenta",
+  "Sem operador",
+  "Manutenção",
+  "Processo",
+];
+
 function App() {
+
+  // =====================================================
+  // STATES
+  // =====================================================
 
   const [usuario, setUsuario] =
     useState(null);
@@ -45,30 +59,43 @@ function App() {
   const [filtroMaquina, setFiltroMaquina] =
     useState("TODAS");
 
+  const [filtroCritica, setFiltroCritica] =
+    useState("TODAS");
+
   const [modoTV, setModoTV] =
     useState(false);
 
+  const [popupAberto, setPopupAberto] =
+    useState(false);
 
+  const [maquinaSelecionada,
+    setMaquinaSelecionada] =
+    useState(null);
 
   // =====================================================
-  // FIREBASE
+  // FIREBASE AUTH
   // =====================================================
 
   useEffect(() => {
 
     const unsubscribeAuth =
-      onAuthStateChanged(auth, (user) => {
+      onAuthStateChanged(
+        auth,
+        (user) => {
 
-        setUsuario(user);
+          setUsuario(user);
 
-      });
+        }
+      );
 
-    return () => unsubscribeAuth();
+    return () =>
+      unsubscribeAuth();
 
   }, []);
 
-
-
+  // =====================================================
+  // FIRESTORE REALTIME
+  // =====================================================
 
   useEffect(() => {
 
@@ -92,12 +119,10 @@ function App() {
 
       });
 
-    return () => unsubscribe();
+    return () =>
+      unsubscribe();
 
   }, []);
-
-
-
 
   // =====================================================
   // LOGIN
@@ -120,9 +145,6 @@ function App() {
     }
   }
 
-
-
-
   // =====================================================
   // LOGOUT
   // =====================================================
@@ -133,11 +155,8 @@ function App() {
 
   }
 
-
-
-
   // =====================================================
-  // RESET
+  // RESET HISTÓRICO
   // =====================================================
 
   async function resetarHistorico() {
@@ -171,9 +190,6 @@ function App() {
 
   }
 
-
-
-
   // =====================================================
   // STATUS
   // =====================================================
@@ -192,9 +208,6 @@ function App() {
     );
   }
 
-
-
-
   function getClasseStatus(status) {
 
     if (status === "Funcionando") {
@@ -211,9 +224,6 @@ function App() {
 
     return "manutencao";
   }
-
-
-
 
   function calcularTempo(timestamp) {
 
@@ -242,62 +252,101 @@ function App() {
     return `${minutos}min`;
   }
 
-
-
-
   // =====================================================
   // ALTERAR STATUS
   // =====================================================
 
   async function alterarStatus(
     maquina,
-    novoStatus
+    novoStatus,
+    motivo = ""
   ) {
 
-    const ultimoEvento =
-      historico.find(
-        (item) =>
-          item.maquina === maquina.nome
+    try {
+
+      const ultimoEvento =
+        historico.find(
+          (item) =>
+            item.maquina ===
+            maquina.nome
+        );
+
+      if (
+        ultimoEvento?.novoStatus ===
+        novoStatus
+      ) {
+        return;
+      }
+
+      await addDoc(
+        collection(
+          db,
+          "historico"
+        ),
+        {
+
+          maquina:
+            maquina.nome,
+
+          setor:
+            maquina.setor,
+
+          motivo,
+
+          statusAnterior:
+            ultimoEvento?.novoStatus ||
+            "Funcionando",
+
+          novoStatus,
+
+          operador:
+            usuario?.email ||
+            "Operador",
+
+          dataHora:
+            new Date().toLocaleString(
+              "pt-BR"
+            ),
+
+          timestamp:
+            Date.now(),
+
+        }
       );
 
-    if (
-      ultimoEvento?.novoStatus ===
-      novoStatus
-    ) {
-      return;
+    } catch (erro) {
+
+      console.log(erro);
+
+      alert(
+        "Erro ao alterar status"
+      );
+
     }
-
-    await addDoc(
-      collection(db, "historico"),
-      {
-
-        maquina: maquina.nome,
-
-        setor: maquina.setor,
-
-        statusAnterior:
-          ultimoEvento?.novoStatus ||
-          "Funcionando",
-
-        novoStatus,
-
-        operador:
-          usuario?.email ||
-          "Operador",
-
-        dataHora:
-          new Date().toLocaleString(
-            "pt-BR"
-          ),
-
-        timestamp: Date.now(),
-
-      }
-    );
   }
 
+  // =====================================================
+  // SELECIONAR MOTIVO
+  // =====================================================
 
+  async function selecionarMotivo(
+    motivo
+  ) {
 
+    if (!maquinaSelecionada)
+      return;
+
+    await alterarStatus(
+      maquinaSelecionada,
+      "Parado",
+      motivo
+    );
+
+    setPopupAberto(false);
+
+    setMaquinaSelecionada(null);
+
+  }
 
   // =====================================================
   // FILTROS
@@ -316,12 +365,20 @@ function App() {
           ? true
           : m.nome === filtroMaquina;
 
-      return setorOk && maquinaOk;
+      const criticaOk =
+        filtroCritica === "TODAS"
+          ? true
+          : filtroCritica === "CRITICAS"
+          ? m.critica === true
+          : m.critica === false;
+
+      return (
+        setorOk &&
+        maquinaOk &&
+        criticaOk
+      );
 
     });
-
-
-
 
   // =====================================================
   // ORDENAÇÃO
@@ -361,9 +418,6 @@ function App() {
       historico,
     ]);
 
-
-
-
   // =====================================================
   // LOGIN SCREEN
   // =====================================================
@@ -376,7 +430,9 @@ function App() {
 
         <div className="login-box">
 
-          <h1>Plant Monitor</h1>
+          <h1>
+            Plant Monitor
+          </h1>
 
           <p>
             Controle industrial em tempo real
@@ -387,7 +443,9 @@ function App() {
             placeholder="E-mail"
             value={email}
             onChange={(e) =>
-              setEmail(e.target.value)
+              setEmail(
+                e.target.value
+              )
             }
           />
 
@@ -396,11 +454,15 @@ function App() {
             placeholder="Senha"
             value={senha}
             onChange={(e) =>
-              setSenha(e.target.value)
+              setSenha(
+                e.target.value
+              )
             }
           />
 
-          <button onClick={fazerLogin}>
+          <button
+            onClick={fazerLogin}
+          >
             Entrar
           </button>
 
@@ -411,9 +473,6 @@ function App() {
     );
   }
 
-
-
-
   // =====================================================
   // DASHBOARD
   // =====================================================
@@ -422,15 +481,21 @@ function App() {
 
     <div
       className={`container ${
-        modoTV ? "tv-mode" : ""
+        modoTV
+          ? "tv-mode"
+          : ""
       }`}
     >
+
+      {/* TOPO */}
 
       <div className="topo">
 
         <div>
 
-          <h1>Plant Monitor</h1>
+          <h1>
+            Plant Monitor
+          </h1>
 
           <p>
             Controle manual de funcionamento dos equipamentos
@@ -449,7 +514,9 @@ function App() {
             <button
               className="tv-btn"
               onClick={() =>
-                setModoTV(!modoTV)
+                setModoTV(
+                  !modoTV
+                )
               }
             >
               {modoTV
@@ -459,7 +526,9 @@ function App() {
 
             <button
               className="resetar"
-              onClick={resetarHistorico}
+              onClick={
+                resetarHistorico
+              }
             >
               Reset Histórico
             </button>
@@ -476,9 +545,6 @@ function App() {
         </div>
 
       </div>
-
-
-
 
       {/* FILTROS */}
 
@@ -514,9 +580,6 @@ function App() {
 
         </select>
 
-
-
-
         <select
           value={filtroMaquina}
           onChange={(e) =>
@@ -543,10 +606,31 @@ function App() {
 
         </select>
 
+        <select
+          value={filtroCritica}
+
+          onChange={(e) =>
+            setFiltroCritica(
+              e.target.value
+            )
+          }
+        >
+
+          <option value="TODAS">
+            TODAS
+          </option>
+
+          <option value="CRITICAS">
+            SOMENTE CRÍTICAS
+          </option>
+
+          <option value="NORMAIS">
+            SOMENTE NORMAIS
+          </option>
+
+        </select>
+
       </div>
-
-
-
 
       {/* KPI */}
 
@@ -555,8 +639,11 @@ function App() {
         historico={historico}
       />
 
+      {/* PARETO */}
 
-
+      <ParetoPerdas
+        historico={historico}
+      />
 
       {/* GRID */}
 
@@ -591,28 +678,31 @@ function App() {
             return (
 
               <div
-                className={`card ${getClasseStatus(statusAtual)}`}
                 key={maquina.id}
+                className={`maquina-card ${
+                  maquina.critica
+                    ? "critica"
+                    : ""
+                }`}
               >
 
-                <h2>
-                  {maquina.nome}
-                </h2>
+                <div className="titulo-maquina">
 
-                <p>
+                  <h3 className="maquina-nome">
+                    {maquina.nome}
+                  </h3>
 
-                  <strong>
-                    Setor:
-                  </strong>
+                  {maquina.critica && (
+                    <span className="badge-critica">
+                      CRÍTICA
+                    </span>
+                  )}
 
-                  {" "}
+                </div>
 
+                <p className="maquina-setor">
                   {maquina.setor}
-
                 </p>
-
-
-
 
                 {/* STATUS */}
 
@@ -631,72 +721,62 @@ function App() {
                   </div>
 
                   <div className="tempo-status">
-
                     há {tempoStatus}
-
                   </div>
 
                 </div>
 
+                {/* SELECT STATUS */}
 
+                <div className="status-select-box">
 
+                  <select
+                    className={`status-select ${getClasseStatus(statusAtual)}`}
 
-                {/* BOTÕES */}
+                    value={statusAtual}
 
-                <div className="botoes">
+                    onChange={(e) => {
 
-                  <button
-                    className="funcionando"
-                    onClick={() =>
+                      const novoStatus =
+                        e.target.value;
+
+                      if (novoStatus === "Parado") {
+
+                        setMaquinaSelecionada(
+                          maquina
+                        );
+
+                        setPopupAberto(true);
+
+                        return;
+                      }
+
                       alterarStatus(
                         maquina,
-                        "Funcionando"
-                      )
-                    }
+                        novoStatus
+                      );
+                    }}
                   >
-                    Funcionando
-                  </button>
 
-                  <button
-                    className="parado"
-                    onClick={() =>
-                      alterarStatus(
-                        maquina,
-                        "Parado"
-                      )
-                    }
-                  >
-                    Parado
-                  </button>
+                    <option value="Funcionando">
+                      Funcionando
+                    </option>
 
-                  <button
-                    className="setup"
-                    onClick={() =>
-                      alterarStatus(
-                        maquina,
-                        "Setup"
-                      )
-                    }
-                  >
-                    Setup
-                  </button>
+                    <option value="Parado">
+                      Parado
+                    </option>
 
-                  <button
-                    className="manutencao"
-                    onClick={() =>
-                      alterarStatus(
-                        maquina,
-                        "Manutenção"
-                      )
-                    }
-                  >
-                    Manutenção
-                  </button>
+                    <option value="Setup">
+                      Setup
+                    </option>
+
+                    <option value="Manutenção">
+                      Manutenção
+                    </option>
+
+                  </select>
 
                 </div>
-
-
-
 
                 {/* HISTÓRICO */}
 
@@ -723,6 +803,15 @@ function App() {
 
                         {item.dataHora}
 
+                        {item.motivo && (
+                          <>
+                            {" "}
+                            | Motivo:
+                            {" "}
+                            {item.motivo}
+                          </>
+                        )}
+
                       </div>
 
                     ))}
@@ -736,6 +825,64 @@ function App() {
         )}
 
       </div>
+
+      {/* POPUP */}
+
+      {popupAberto && (
+
+        <div className="popup-overlay">
+
+          <div className="popup-box">
+
+            <h2>
+              Motivo da parada
+            </h2>
+
+            <div className="popup-motivos">
+
+              {motivosParada.map(
+                (motivo) => (
+
+                  <button
+                    key={motivo}
+
+                    onClick={() =>
+                      selecionarMotivo(
+                        motivo
+                      )
+                    }
+                  >
+                    {motivo}
+                  </button>
+
+                )
+              )}
+
+            </div>
+
+            <button
+              className="fechar-popup"
+
+              onClick={() => {
+
+                setPopupAberto(
+                  false
+                );
+
+                setMaquinaSelecionada(
+                  null
+                );
+
+              }}
+            >
+              Cancelar
+            </button>
+
+          </div>
+
+        </div>
+
+      )}
 
     </div>
 
