@@ -1,14 +1,23 @@
 function KPICards({
-  maquinas,
-  historico,
+  maquinas = [],
+  historico = [],
 }) {
 
-  function getStatusAtual(nomeMaquina) {
+  function getStatusAtual(
+    nomeMaquina
+  ) {
+
+    if (
+      !Array.isArray(historico)
+    ) {
+      return "Funcionando";
+    }
 
     const ultimoEvento =
       historico.find(
         (item) =>
-          item.maquina === nomeMaquina
+          item?.maquina ===
+          nomeMaquina
       );
 
     return (
@@ -45,20 +54,15 @@ function KPICards({
         "Manutenção"
     ).length;
 
-  const disponibilidade =
-    (
-      (funcionando /
-        maquinas.length) *
-      100
-    ).toFixed(1);
-
   return (
 
     <div className="kpi-grid">
 
       <div className="kpi-card funcionando">
 
-        <h3>Funcionando</h3>
+        <h3>
+          FUNCIONANDO
+        </h3>
 
         <span>
           {funcionando}
@@ -68,7 +72,9 @@ function KPICards({
 
       <div className="kpi-card parado">
 
-        <h3>Paradas</h3>
+        <h3>
+          PARADAS
+        </h3>
 
         <span>
           {paradas}
@@ -78,7 +84,9 @@ function KPICards({
 
       <div className="kpi-card setup">
 
-        <h3>Setup</h3>
+        <h3>
+          SETUP
+        </h3>
 
         <span>
           {setup}
@@ -88,20 +96,12 @@ function KPICards({
 
       <div className="kpi-card manutencao">
 
-        <h3>Manutenção</h3>
+        <h3>
+          MANUTENÇÃO
+        </h3>
 
         <span>
           {manutencao}
-        </span>
-
-      </div>
-
-      <div className="kpi-card disponibilidade">
-
-        <h3>Disponibilidade</h3>
-
-        <span>
-          {disponibilidade}%
         </span>
 
       </div>

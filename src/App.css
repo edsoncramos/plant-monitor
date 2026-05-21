@@ -1058,3 +1058,126 @@ RESPONSIVO
     font-size: 14px;
   }
 }
+
+/* =====================================================
+CONTROLES
+===================================================== */
+
+.controles {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 12px;
+
+  margin-top: 30px;
+
+  margin-bottom: 30px;
+
+  flex-wrap: wrap;
+}
+
+.controles select {
+
+  height: 42px;
+
+  padding: 0 14px;
+
+  border-radius: 10px;
+
+  border: 2px solid #d9d9d9;
+
+  background: white;
+
+  font-size: 15px;
+
+  min-width: 260px;
+
+  outline: none;
+
+  transition: 0.2s;
+}
+
+.controles select:focus {
+
+  border-color: #0f172a;
+}
+
+.controles button {
+
+  height: 42px;
+
+  padding: 0 18px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  color: white;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+
+  min-width: 130px;
+}
+
+.controles button:hover {
+
+  transform: translateY(-2px);
+
+  opacity: 0.9;
+}
+
+/* =====================================================
+BOTÕES
+===================================================== */
+
+.btn-funcionando {
+
+  background: #16a34a;
+}
+
+.btn-parado {
+
+  background: #dc2626;
+}
+
+.btn-setup {
+
+  background: #d97706;
+}
+
+.btn-manutencao {
+
+  background: #64748b;
+}
+
+/* =====================================================
+RESPONSIVO
+===================================================== */
+
+@media (max-width: 768px) {
+
+  .controles {
+
+    flex-direction: column;
+  }
+
+  .controles select {
+
+    width: 100%;
+  }
+
+  .controles button {
+
+    width: 100%;
+  }
+}

@@ -1,86 +1,82 @@
-function ParetoPerdas({
-  historico,
-}) {
+function ParetoPerdas({ historico = [] }) {
 
-  const motivos = {};
+  const perdas = {};
 
-  historico.forEach((evento) => {
+  historico.forEach((item) => {
 
     if (
-      evento.novoStatus === "Parado" &&
-      evento.motivo
+      item.novoStatus === "Parado" &&
+      item.motivo
     ) {
 
-      const motivo =
-        evento.motivo;
+      if (!perdas[item.motivo]) {
+        perdas[item.motivo] = 0;
+      }
 
-      motivos[motivo] =
-        (motivos[motivo] || 0) + 1;
+      perdas[item.motivo]++;
+
     }
+
   });
 
-  const ranking =
-    Object.entries(motivos)
+  const dados =
+    Object.entries(perdas)
+      .map(([motivo, total]) => ({
+        motivo,
+        total,
+      }))
+      .sort(
+        (a, b) =>
+          b.total - a.total
+      );
 
-      .sort((a, b) => b[1] - a[1]);
+  if (dados.length === 0) {
 
-  const maiorValor =
-    ranking.length > 0
-      ? ranking[0][1]
-      : 1;
+    return (
+      <div className="pareto-container">
+
+        <h2>
+          Pareto de Perdas
+        </h2>
+
+        <p>
+          Nenhuma parada registrada.
+        </p>
+
+      </div>
+    );
+  }
 
   return (
 
-    <div className="pareto-box">
+    <div className="pareto-container">
 
       <h2>
         Pareto de Perdas
       </h2>
 
-      {ranking.length === 0 && (
+      <div className="pareto-list">
 
-        <p className="sem-dados">
-          Sem dados de parada
-        </p>
+        {dados.map((item) => (
 
-      )}
-
-      {ranking.map(([motivo, total]) => (
-
-        <div
-          key={motivo}
-          className="pareto-item"
-        >
-
-          <div className="pareto-topo">
+          <div
+            key={item.motivo}
+            className="pareto-item"
+          >
 
             <span>
-              {motivo}
+              {item.motivo}
             </span>
 
             <strong>
-              {total}
+              {item.total}
             </strong>
 
           </div>
 
-          <div className="pareto-barra-bg">
+        ))}
 
-            <div
-              className="pareto-barra"
-
-              style={{
-                width: `${
-                  (total / maiorValor) * 100
-                }%`,
-              }}
-            />
-
-          </div>
-
-        </div>
-
-      ))}
+      </div>
 
     </div>
 
