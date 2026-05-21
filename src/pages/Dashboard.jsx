@@ -17,11 +17,12 @@ import {
   signOut,
 } from "firebase/auth";
 
-import ParetoPerdas from "../components/ParetoPerdas";
-import KPICards from "../components/KPICards";
+import ParetoPerdas from "../components/ParetoPerdas.jsx";
+import KPICards from "../components/KPICards.jsx";
 
-import { db, auth } from "../firebase";
-import { maquinas } from "../data/maquinas";
+import { db, auth } from "../firebase.js";
+
+import { maquinas } from "../data/maquinas.js";
 
 import {
   calcularTempoProdutivo,
@@ -483,26 +484,190 @@ function Dashboard() {
     );
   }
 
-  return (
+ return (
 
-    <div className="container">
+  <div className="container">
+
+    <div className="top-bar">
 
       <h1>
         Plant Monitor
       </h1>
 
-      <KPICards
-        maquinas={maquinas}
-        historico={historico}
-      />
+      <div className="acoes-topo">
 
-      <ParetoPerdas
-        historico={historico}
-      />
+        <button
+          className="btn-topo"
+          onClick={paradaAlmoco}
+        >
+          Almoço
+        </button>
+
+        <button
+          className="btn-topo"
+          onClick={retornoTrabalho}
+        >
+          Retorno
+        </button>
+
+        <button
+          className="btn-topo"
+          onClick={encerrarTurno}
+        >
+          Encerrar Turno
+        </button>
+
+        <button
+          className="btn-topo btn-danger"
+          onClick={resetarHistorico}
+        >
+          Reset
+        </button>
+
+        <button
+          className="btn-topo"
+          onClick={sair}
+        >
+          Sair
+        </button>
+
+      </div>
 
     </div>
 
-  );
-}
+    <KPICards
+      maquinas={maquinas}
+      historico={historico}
+    />
 
-export default Dashboard;
+    <ParetoPerdas
+      historico={historico}
+    />
+
+    <div className="grid-maquinas">
+
+      {maquinasFiltradas.map((maquina) => {
+
+        const status =
+          getStatusAtual(
+            maquina.nome
+          );
+
+        const ultimoEvento =
+          historico.find(
+            (item) =>
+              item.maquina ===
+              maquina.nome
+          );
+
+        return (
+
+          <div
+            key={maquina.nome}
+            className={
+              `card-maquina ${getClasseStatus(status)}`
+            }
+          >
+
+            <div className="card-header">
+
+              <h3>
+                {maquina.nome}
+              </h3>
+
+              {maquina.critica && (
+                <span className="tag-critica">
+                  CRÍTICA
+                </span>
+              )}
+
+            </div>
+
+            <div className="setor">
+              {maquina.setor}
+            </div>
+
+            <div className="status-maquina">
+              {status}
+            </div>
+
+            <div className="tempo-produtivo">
+
+              Tempo produtivo:
+
+              {" "}
+
+              {
+                calcularTempoProdutivo(
+                  ultimoEvento?.timestamp
+                )
+              }
+
+            </div>
+
+            <div className="acoes-status">
+
+              <button
+                className="btn-status funcionando"
+                onClick={() =>
+                  alterarStatus(
+                    maquina,
+                    "Funcionando"
+                  )
+                }
+              >
+                Rodando
+              </button>
+
+              <button
+                className="btn-status parado"
+                onClick={() =>
+                  alterarStatus(
+                    maquina,
+                    "Parado",
+                    "Sem demanda"
+                  )
+                }
+              >
+                Parado
+              </button>
+
+              <button
+                className="btn-status setup"
+                onClick={() =>
+                  alterarStatus(
+                    maquina,
+                    "Setup",
+                    "Setup"
+                  )
+                }
+              >
+                Setup
+              </button>
+
+              <button
+                className="btn-status manutencao"
+                onClick={() =>
+                  alterarStatus(
+                    maquina,
+                    "Manutenção",
+                    "Manutenção"
+                  )
+                }
+              >
+                Manutenção
+              </button>
+
+            </div>
+
+          </div>
+
+        );
+
+      })}
+
+    </div>
+
+  </div>
+
+);
