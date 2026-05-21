@@ -16,7 +16,7 @@ import { maquinas } from "../data/maquinas";
 
 import {
   calcularTempoProdutivo,
-} from "../utils/TempoProdutivo.js";
+} from "../utils/tempoprodutivo.js";
 
 import "../App.css";
 
