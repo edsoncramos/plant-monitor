@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   collection,
@@ -23,8 +23,7 @@ import KPICards from "./components/KPICards";
 import { db, auth } from "./firebase";
 import { maquinas } from "./data/maquinas";
 
-import { calcularTempoProdutivo }
-from "./utils/calculoTurno";
+import { calcularTempoProdutivo } from "./utils/calculoTurno";
 
 import "./App.css";
 
@@ -194,6 +193,93 @@ function App() {
   }
 
   // =====================================================
+  // PARADA ALMOÇO
+  // =====================================================
+
+  async function paradaAlmoco() {
+
+    for (const maquina of maquinas) {
+
+      const statusAtual =
+        getStatusAtual(
+          maquina.nome
+        );
+
+      if (
+        statusAtual ===
+        "Funcionando"
+      ) {
+
+        await alterarStatus(
+          maquina,
+          "Almoço",
+          "Parada almoço"
+        );
+
+      }
+
+    }
+  }
+
+  // =====================================================
+  // RETORNO TRABALHO
+  // =====================================================
+
+  async function retornoTrabalho() {
+
+    for (const maquina of maquinas) {
+
+      const statusAtual =
+        getStatusAtual(
+          maquina.nome
+        );
+
+      if (
+        statusAtual ===
+        "Almoço"
+      ) {
+
+        await alterarStatus(
+          maquina,
+          "Funcionando",
+          "Retorno almoço"
+        );
+
+      }
+
+    }
+  }
+
+  // =====================================================
+  // ENCERRAR TURNO
+  // =====================================================
+
+  async function encerrarTurno() {
+
+    for (const maquina of maquinas) {
+
+      const statusAtual =
+        getStatusAtual(
+          maquina.nome
+        );
+
+      if (
+        statusAtual !==
+        "Fim Turno"
+      ) {
+
+        await alterarStatus(
+          maquina,
+          "Fim Turno",
+          "Encerramento turno"
+        );
+
+      }
+
+    }
+  }
+
+  // =====================================================
   // STATUS
   // =====================================================
 
@@ -225,6 +311,14 @@ function App() {
       return "setup";
     }
 
+    if (status === "Almoço") {
+      return "almoco";
+    }
+
+    if (status === "Fim Turno") {
+      return "fimturno";
+    }
+
     return "manutencao";
   }
 
@@ -240,11 +334,6 @@ function App() {
 
     try {
 
-      console.log(
-        "Salvando motivo:",
-        motivo
-      );
-
       const ultimoEvento =
         historico.find(
           (item) =>
@@ -253,8 +342,10 @@ function App() {
         );
 
       if (
+        ultimoEvento &&
         ultimoEvento?.novoStatus ===
-        novoStatus
+        novoStatus &&
+        novoStatus !== "Funcionando"
       ) {
         return;
       }
@@ -318,11 +409,6 @@ function App() {
       return;
     }
 
-    console.log(
-      "Motivo selecionado:",
-      motivo
-    );
-
     await alterarStatus(
       maquinaSelecionada,
       "Parado",
@@ -372,38 +458,7 @@ function App() {
   // =====================================================
 
   const maquinasOrdenadas =
-    useMemo(() => {
-
-      return [...maquinasFiltradas]
-        .sort((a, b) => {
-
-          const statusA =
-            getStatusAtual(a.nome);
-
-          const statusB =
-            getStatusAtual(b.nome);
-
-          if (
-            statusA === "Parado" &&
-            statusB !== "Parado"
-          ) {
-            return -1;
-          }
-
-          if (
-            statusB === "Parado" &&
-            statusA !== "Parado"
-          ) {
-            return 1;
-          }
-
-          return 0;
-        });
-
-    }, [
-      maquinasFiltradas,
-      historico,
-    ]);
+    maquinasFiltradas;
 
   // =====================================================
   // LOGIN SCREEN
@@ -497,6 +552,27 @@ function App() {
           </strong>
 
           <div className="acoes-topo">
+
+            <button
+              className="almoco-btn"
+              onClick={paradaAlmoco}
+            >
+              Parada Almoço
+            </button>
+
+            <button
+              className="retorno-btn"
+              onClick={retornoTrabalho}
+            >
+              Retorno Trabalho
+            </button>
+
+            <button
+              className="fimturno-btn"
+              onClick={encerrarTurno}
+            >
+              Encerrar Turno
+            </button>
 
             <button
               className="tv-btn"
@@ -655,6 +731,9 @@ function App() {
                 ultimoEvento?.timestamp
               );
 
+            const motivoAtual =
+              ultimoEvento?.motivo || "";
+
             const historicoMaquina =
               historico.filter(
                 (item) =>
@@ -707,6 +786,12 @@ function App() {
 
                   </div>
 
+                  {motivoAtual && (
+                    <div className="motivo-atual">
+                      {motivoAtual}
+                    </div>
+                  )}
+
                   <div className="tempo-status">
                     há {tempoStatus}
                   </div>
@@ -722,12 +807,17 @@ function App() {
 
                     value={statusAtual}
 
-                    onChange={(e) => {
+                    onChange={async (e) => {
 
                       const novoStatus =
                         e.target.value;
 
                       if (novoStatus === "Parado") {
+
+                        await alterarStatus(
+                          maquina,
+                          "Parado"
+                        );
 
                         setMaquinaSelecionada(
                           maquina
@@ -759,6 +849,14 @@ function App() {
 
                     <option value="Manutenção">
                       Manutenção
+                    </option>
+
+                    <option value="Almoço">
+                      Almoço
+                    </option>
+
+                    <option value="Fim Turno">
+                      Fim Turno
                     </option>
 
                   </select>
@@ -850,15 +948,20 @@ function App() {
             <button
               className="fechar-popup"
 
-              onClick={() => {
+              onClick={async () => {
 
-                setPopupAberto(
-                  false
-                );
+                if (maquinaSelecionada) {
 
-                setMaquinaSelecionada(
-                  null
-                );
+                  await alterarStatus(
+                    maquinaSelecionada,
+                    "Funcionando"
+                  );
+
+                }
+
+                setPopupAberto(false);
+
+                setMaquinaSelecionada(null);
 
               }}
             >

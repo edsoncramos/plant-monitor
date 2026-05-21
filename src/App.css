@@ -1185,3 +1185,87 @@ PARETO
   color: #64748b;
 
 }
+
+.acoes-topo {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.acoes-topo button {
+  border: none;
+  border-radius: 12px;
+  padding: 14px 22px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+}
+
+.acoes-topo button:hover {
+  transform: translateY(-2px);
+  opacity: 0.92;
+}
+
+/* ALMOÇO */
+
+.almoco-btn {
+  background: linear-gradient(
+    135deg,
+    #a855f7,
+    #7c3aed
+  );
+}
+
+/* RETORNO */
+
+.retorno-btn {
+  background: linear-gradient(
+    135deg,
+    #10b981,
+    #059669
+  );
+}
+
+/* FIM TURNO */
+
+.fimturno-btn {
+  background: linear-gradient(
+    135deg,
+    #64748b,
+    #475569
+  );
+}
+
+/* TV */
+
+.tv-btn {
+  background: linear-gradient(
+    135deg,
+    #2563eb,
+    #1d4ed8
+  );
+}
+
+/* RESET */
+
+.resetar {
+  background: linear-gradient(
+    135deg,
+    #111827,
+    #000000
+  );
+}
+
+/* SAIR */
+
+.sair-btn {
+  background: linear-gradient(
+    135deg,
+    #ef4444,
+    #dc2626
+  );
+}
