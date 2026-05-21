@@ -29,7 +29,7 @@ from "./utils/calculoTurno";
 import "./App.css";
 
 const motivosParada = [
-  "Falta material",
+  "Sem demanda",
   "Setup",
   "Qualidade",
   "Ferramenta",
